@@ -81,13 +81,12 @@ detroitchow/
 - Development environment setup
 
 **Planned:**
-- Backend API development (Spring Boot)
-- Frontend implementation
-- Mobile app development
-- Social media aggregation features
+- **[ROADMAP.md](ROADMAP.md)** - Product Backlog
 
 ## Documentation
-
+- **[ROADMAP.md](ROADMAP.md)** - Product backlog and feature roadmap
+- **[CHANGELOG.md](CHANGELOG.md)** - Version history and release notes
+- **[DECISIONS.md](DECISIONS.md)** - Technical decisions and architectural rationale
 - **[DATABASE.md](docs/DATABASE.md)** - Database schema, setup, conventions, and query examples
 - **[DATA_COLLECTION.md](docs/DATA_COLLECTION.md)** - Data sources, collection scripts, and import procedures
 - **[CLAUDE.md](CLAUDE.md)** - AI assistant instructions and development guidelines
@@ -100,6 +99,7 @@ detroitchow/
 ## Contributing
 
 This project is in early development. Please refer to the documentation:
+- [DECISIONS.md](DECISIONS.md) for technical decisions and rationale
 - [DATABASE.md](docs/DATABASE.md) for database standards and conventions
 - [DATA_COLLECTION.md](docs/DATA_COLLECTION.md) for data collection guidelines
 - [CLAUDE.md](CLAUDE.md) for development guidelines
