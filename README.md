@@ -70,15 +70,11 @@ detroitchow/
 
 ## Current Status
 
-**Completed:**
-- Database schema design and implementation
-- Initial data migration from legacy JSON (538 locations)
-- OpenStreetMap data collection scripts
-- Extensive OSM data collection for Metro Detroit
-
 **In Progress:**
-- Technology stack finalization
-- Development environment setup
+- Gathering Dataset phase
+- Batch Backend planning
+- Service API planning
+- **[TODO.md](TODO.md)**
 
 **Planned:**
 - **[ROADMAP.md](ROADMAP.md)** - Product Backlog
