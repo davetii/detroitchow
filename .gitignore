@@ -1,0 +1,199 @@
+# DetroitChow .gitignore
+
+# ============================================================================
+# Python
+# ============================================================================
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+*.virtualenv
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# ============================================================================
+# Node.js / JavaScript (for future web frontend)
+# ============================================================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.eslintcache
+
+# ============================================================================
+# Java / Spring Boot (for backend)
+# ============================================================================
+target/
+!.mvn/wrapper/maven-wrapper.jar
+*.class
+*.log
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Maven
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# ============================================================================
+# Database
+# ============================================================================
+# Don't commit actual database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Don't commit database dumps (except seed data in data/)
+*.sql.gz
+*.dump
+
+# Don't commit database connection configs with passwords
+application-local.properties
+application-local.yml
+database-local.yml
+
+# ============================================================================
+# Data Files
+# ============================================================================
+# Large data files - commit only samples/seeds
+data/imports/*.sql
+data/exports/*.csv
+data/exports/*.json
+data/osm-raw/*.json
+data/osm-raw/*.csv
+
+# Keep example/seed data
+!data/legacy/
+!data/seed/
+
+# ============================================================================
+# IDE / Editors
+# ============================================================================
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Eclipse
+.classpath
+.project
+.settings/
+bin/
+
+# NetBeans
+nbproject/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# ============================================================================
+# OS Files
+# ============================================================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+
+# ============================================================================
+# Logs
+# ============================================================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ============================================================================
+# Environment Variables
+# ============================================================================
+.env
+.env.local
+.env.*.local
+secrets.properties
+
+# ============================================================================
+# Temporary Files
+# ============================================================================
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+
+# ============================================================================
+# Docker (if you use it later)
+# ============================================================================
+docker-compose.override.yml
+
+# ============================================================================
+# Project Specific
+# ============================================================================
+# Ignore large OSM query results (except samples)
+scripts/data-collection/*.json
+scripts/data-collection/*.csv
+
+# Ignore generated SQL import files (regenerate as needed)
+data/imports/locations_import.sql
+
+# Keep these important files
+!PROJECT_CONTEXT.md
+!README.md
+!database/schema/*.sql
+!database/seed-data/*.py
