@@ -84,9 +84,14 @@ detroitchow/
 - **[ROADMAP.md](ROADMAP.md)** - Product Backlog
 
 ## Documentation
+
+### Planning & Progress
+- **[TODO.md](TODO.md)** - Active tasks, blockers, and immediate next steps
 - **[ROADMAP.md](ROADMAP.md)** - Product backlog and feature roadmap
 - **[CHANGELOG.md](CHANGELOG.md)** - Version history and release notes
 - **[DECISIONS.md](DECISIONS.md)** - Technical decisions and architectural rationale
+
+### Technical Documentation
 - **[DATABASE.md](docs/DATABASE.md)** - Database schema, setup, conventions, and query examples
 - **[DATA_COLLECTION.md](docs/DATA_COLLECTION.md)** - Data sources, collection scripts, and import procedures
 - **[CLAUDE.md](CLAUDE.md)** - AI assistant instructions and development guidelines
