@@ -7,7 +7,7 @@ Active work items, blockers, and immediate next steps for DetroitChow developmen
 ---
 
 ## In Progress
-- [ ] Parse OSM Conetent and add to main dataset
+- [ ] Merge OSM Content to main data 
 - [ ] Design Data collection approach
 - [ ] Finalize backend framework decision (Spring Boot vs alternatives)
 - [ ] Finalize frontend framework decision (React/Vue/Next.js)
@@ -99,7 +99,7 @@ Move items here when done, then archive to CHANGELOG.md periodically:
 - [x] Core documentation (DATABASE.md, DATA_COLLECTION.md, CLAUDE.md)
 - [x] Project structure and Python environment setup
 - [x] CHANGELOG.md and DECISIONS.md created
-
+- [x] Stage OSM Content 
 ---
 
 ## Notes

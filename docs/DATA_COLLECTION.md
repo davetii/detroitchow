@@ -16,8 +16,11 @@ DetroitChow aggregates restaurant data from multiple sources. This document cove
 - **Files:**
   - `data/legacy/GetStores-response-indented.json`
   - `data/legacy/get.json`
+  - `data/osm-raw/osm-raw.7z`
 - **Import SQL:** `data/imports/detroitchow_legacy_imports.sql`
-- **Records:** 538 restaurants
+- **Records:** 
+  - 538 Legacy restaurants
+  - 1291 potential from OSM
 - **Coverage:** Metro Detroit area
 - **Data Quality:** High - manually curated data
 - **Unique Features:** Contains Yelp reviews (not yet migrated to schema)
@@ -28,10 +31,8 @@ SELECT COUNT(*) FROM detroitchow.locations;  -- Should return 538
 ```
 
 ### 2. OpenStreetMap Data (COLLECTED, not yet imported)
-
 **Source:** OpenStreetMap via Overpass API
-
-**Status:** Data collected, awaiting import to database
+**Status:** Data collected and loaded to Stage table, awaiting import to main
 
 **Details:**
 - **County-level data:** Stored in `data/osm-raw/`
@@ -44,10 +45,15 @@ SELECT COUNT(*) FROM detroitchow.locations;  -- Should return 538
 - Macomb County
 - Oakland County
 - Wayne County
-- (Additional counties as needed)
+- Washtenaw
+- Genesee
+- Livingston
+- Lapeer
+- Saint Clair
+- Huron
+- Saginaw
 
 ## Data Collection Scripts
-
 All scripts located in `scripts/data-collect/`
 
 ### Python Environment Setup
