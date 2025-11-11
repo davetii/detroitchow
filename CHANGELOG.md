@@ -26,9 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Database Schema**: PostgreSQL schema with 6 core tables (`locations`, `tags`, `menus`, `links`, `sites`, `location_hours`)
   - Automatic audit trail via database triggers
   - CASCADE DELETE foreign keys for data integrity
-- **Data Collection**: Python scripts for OpenStreetMap queries (by city and county)
+- **Data Collection**: Python scripts for querying and loading OpenStreetMap content into detroitchow database
 - **Legacy Data Import**: 538 restaurants from original DetroitChow.com (15 years old)
-- **Documentation**: DATABASE.md, DATA_COLLECTION.md, CLAUDE.md, ROADMAP.md, DECISIONS.md, CHANGELOG.md, README.md
+- **Documentation**: DATABASE.md, DATA_COLLECTION.md, CLAUDE.md, ROADMAP.md, DECISIONS.md, CHANGELOG.md, README.md, TODO.md
 - **Project Infrastructure**: Python venv, git repo, directory structure
 
 ### Data Status

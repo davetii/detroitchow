@@ -44,6 +44,7 @@ CREATE TABLE detroitchow.locations (
     address2 VARCHAR(500),
     city VARCHAR(100),
     locality VARCHAR(100),
+    zip VARCHAR(100),
     region VARCHAR(100),
     country VARCHAR(2),
     phone1 VARCHAR(20),
