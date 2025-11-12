@@ -26,6 +26,7 @@ DetroitChow is a restaurant discovery platform for Metro Detroit that aggregates
 
 - **Database:** PostgreSQL (schema: `detroitchow`)
 - **Backend (Planned):** Spring Boot (Java) with RESTful API
+- **Frontend Admin Tool:** TBD (React, Vue, or similar)
 - **Frontend (Pending):** TBD (React, Vue, or similar)
 - **Data Scripts:** Python for data collection and migration
 - **Python Dependencies:** requests library (for OpenStreetMap API queries)

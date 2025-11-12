@@ -58,6 +58,7 @@ CREATE TABLE detroitchow.locations (
     opentable VARCHAR(2000),
     tripadvisor VARCHAR(2000),
     yelp VARCHAR(2000),
+    hours VARCHAR(2000),
     create_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     create_user VARCHAR(100),
     updated_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -111,19 +112,6 @@ CREATE TABLE detroitchow.links (
         REFERENCES detroitchow.sites(site) ON DELETE SET NULL
 );
 
--- Location hours table
-CREATE TABLE detroitchow.location_hours (
-    locationid VARCHAR(50) NOT NULL,
-    line_no INT NOT NULL,
-    text VARCHAR(2000),
-    create_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    create_user VARCHAR(100),
-    updated_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    update_user VARCHAR(100),
-    PRIMARY KEY (locationid, line_no),
-    CONSTRAINT fk_location_hours_location FOREIGN KEY (locationid) 
-        REFERENCES detroitchow.locations(locationid) ON DELETE CASCADE
-);
 
 -- ============================================================================
 -- INDEXES
@@ -186,11 +174,6 @@ CREATE TRIGGER trigger_links_audit
 
 CREATE TRIGGER trigger_sites_audit
     BEFORE INSERT OR UPDATE ON detroitchow.sites
-    FOR EACH ROW
-    EXECUTE FUNCTION detroitchow.update_audit_columns();
-
-CREATE TRIGGER trigger_location_hours_audit
-    BEFORE INSERT OR UPDATE ON detroitchow.location_hours
     FOR EACH ROW
     EXECUTE FUNCTION detroitchow.update_audit_columns();
 

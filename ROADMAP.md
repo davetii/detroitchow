@@ -1,10 +1,19 @@
 # Roadmap
 
+## Data
+- [x] PostgreSQL
+- [ ] Populate Core Data  (In Progress)
+
 ## Core Platform
 - [x] PostgreSQL + PostGIS setup
-- [ ] OpenStreetMap integration (In Progress)
-- [ ] Google Places API (Next)
-- [ ] Search optimization
+- [ ] Admin Service
+- [ ] Consumer Service
+
+## Admin Tool
+- [ ] Search For Loctions
+- [ ] Create locations
+- [ ] Update Locations
+- [ ] Delete Loations
 
 ## Mobile Experience
 - [ ] Flutter app foundation
@@ -17,3 +26,7 @@
 - [ ] Manual curation tools
 - [ ] Photo management
 - [ ] Quality validation
+- [x] PostgreSQL
+
+## Other
+- [x] Azure Migration

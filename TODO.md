@@ -7,32 +7,53 @@ Active work items, blockers, and immediate next steps for DetroitChow developmen
 ---
 
 ## In Progress
-- [ ] Merge OSM Content to main data 
-- [ ] Design Data collection approach
+- [ ] Merge OSM Content to main data
+- [ ] Spec for Backend API 
 - [ ] Finalize backend framework decision (Spring Boot vs alternatives)
-- [ ] Finalize frontend framework decision (React/Vue/Next.js)
-- [ ] Define mobile app strategy (Flutter vs React Native vs Native)
 
 ---
 
 ## Up Next (Prioritized)
 
-### Documentation Phase
+## Major Features
+- [ ] Data Phase (Schema generation, Populate locations)
+- [ ] Spec for Admin Service
+- [ ] Implement Admin Service
+- [ ] Implement Admin Tool front end
+- [ ] Spec for Consumer Service
+- [ ] Implement Consumer Service
+- [ ] Planing for DetroitChow Web
+- [ ] DetroitChow Map
+- [ ] DetroitChow Web Features
+- [ ] Planing for DetroitChow Android
+- [ ] Planing for DetroitChow Apple
+- [ ] Planning for recurring data capture of locations
+
+
+### Data Phase
+- [ ] Import OSM data to database (after review)
+- [ ] dedup locations post OSM
+- [ ] Verify locations are still open via google API
+- [ ] Validate locations data quality via Google API (phone formats, URLs, coordinates)
+- [ ] use Google API to add more locations
+- [ ] Design recurring Data collection approach
+
+### Architecting Phase
 - [ ] Review and validate OSM data quality in collected JSON files
 - [ ] Document data import/merge strategy for OSM data
 - [ ] Define API endpoint structure (draft OpenAPI spec?)
 - [ ] Create data deduplication strategy document
-
-### Data Phase
-- [ ] Import OSM data to database (after review)
-- [ ] Write data merge script for handling duplicate locations
-- [ ] Validate legacy data quality (phone formats, URLs, coordinates)
+- [ ] Finalize frontend framework decision (React/Vue/Next.js)
+- [ ] Define mobile app strategy (Flutter vs React Native vs Native)
 
 ### Technical Setup
 - [ ] Set up backend project structure (after framework decision)
 - [ ] Configure development database (Docker or local?)
 - [ ] Set up CI/CD pipeline basics (GitHub Actions?)
 - [ ] Choose hosting platform (AWS/GCP/Azure/Heroku)
+
+### Batch Data Population Phase
+
 
 ---
 
@@ -109,3 +130,4 @@ Move items here when done, then archive to CHANGELOG.md periodically:
 - Completed work gets documented in CHANGELOG.md
 - Technical decisions and rationale go in DECISIONS.md
 - Review and update this file regularly (weekly/bi-weekly)
+

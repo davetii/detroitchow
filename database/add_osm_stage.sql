@@ -37,3 +37,7 @@ CREATE TABLE detroitchow.osm_locations_stage (
     PRIMARY KEY (osm_id)
 );
 
+
+alter table detroitchow.osm_locations_stage add column usage_status varchar(50);
+
+alter table detroitchow.osm_locations_stage ALTER COLUMN usage_status type varchar(50);
