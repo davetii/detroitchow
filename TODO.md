@@ -7,13 +7,14 @@ Active work items, blockers, and immediate next steps for DetroitChow developmen
 ---
 
 ## In Progress
-- [ ] dedup locations post OSM
-- [ ] Data Cleansing, verify address, verify postal code, verify status with Google API
 - [ ] 65 OSM with NO Zip code
-- [ ] 576 OSM with NO phone
+- [ ] 577 OSM with NO phone
+- [ ] 1161 OSM with website
+- [ ] Data Cleansing, verify address, verify postal code, verify status with Google API
 ---
 
 ## Up Next (Prioritized)
+- [ ] technical decision on back end batch processing, data cleansing, job scheduling, etc..
 
 ## Major Features
 - [ ] Data Phase (Schema generation, Populate locations)
@@ -113,6 +114,7 @@ Things to consider but not prioritized yet:
 ## Recently Completed
 
 Move items here when done, then archive to CHANGELOG.md periodically:
+- [x] dedup locations post OSM
 - [x] Merge OSM Content to main data
 - [x] Import OSM data to database
 - [x] Database schema design and implementation
