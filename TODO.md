@@ -8,8 +8,8 @@ Active work items, blockers, and immediate next steps for DetroitChow developmen
 
 ## In Progress
 - [ ] Merge OSM Content to main data
-- [ ] Spec for Backend API 
-- [ ] Finalize backend framework decision (Spring Boot vs alternatives)
+- [ ] See Data Phase
+
 
 ---
 
@@ -31,12 +31,17 @@ Active work items, blockers, and immediate next steps for DetroitChow developmen
 
 
 ### Data Phase
-- [ ] Import OSM data to database (after review)
+- [ ] Import OSM data to database
 - [ ] dedup locations post OSM
-- [ ] Verify locations are still open via google API
+- [ ] Data Cleansing, verify address, verify postal code, verify status with Google API
+- [ ] 65 OSM with NO Zip code
+- [ ] 576 OSM with NO phone
 - [ ] Validate locations data quality via Google API (phone formats, URLs, coordinates)
 - [ ] use Google API to add more locations
+- [ ] Hours Calculator
+- [ ] pop tags
 - [ ] Design recurring Data collection approach
+
 
 ### Architecting Phase
 - [ ] Review and validate OSM data quality in collected JSON files

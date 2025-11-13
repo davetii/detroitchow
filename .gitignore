@@ -94,7 +94,6 @@ database-local.yml
 # Data Files
 # ============================================================================
 # Large data files - commit only samples/seeds
-data/imports/*.sql
 data/exports/*.csv
 data/exports/*.json
 data/osm-raw/*.json

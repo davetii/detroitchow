@@ -3,6 +3,10 @@
 ## Data
 - [x] PostgreSQL
 - [ ] Populate Core Data  (In Progress)
+- [ ] Data Cleansing, verify address, verify postal code, verify status
+- [ ] Hours Calculator
+- [ ] pop tags
+
 
 ## Core Platform
 - [x] PostgreSQL + PostGIS setup
