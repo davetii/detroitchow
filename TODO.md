@@ -7,10 +7,10 @@ Active work items, blockers, and immediate next steps for DetroitChow developmen
 ---
 
 ## In Progress
-- [ ] Merge OSM Content to main data
-- [ ] See Data Phase
-
-
+- [ ] dedup locations post OSM
+- [ ] Data Cleansing, verify address, verify postal code, verify status with Google API
+- [ ] 65 OSM with NO Zip code
+- [ ] 576 OSM with NO phone
 ---
 
 ## Up Next (Prioritized)
@@ -31,11 +31,6 @@ Active work items, blockers, and immediate next steps for DetroitChow developmen
 
 
 ### Data Phase
-- [ ] Import OSM data to database
-- [ ] dedup locations post OSM
-- [ ] Data Cleansing, verify address, verify postal code, verify status with Google API
-- [ ] 65 OSM with NO Zip code
-- [ ] 576 OSM with NO phone
 - [ ] Validate locations data quality via Google API (phone formats, URLs, coordinates)
 - [ ] use Google API to add more locations
 - [ ] Hours Calculator
@@ -118,7 +113,8 @@ Things to consider but not prioritized yet:
 ## Recently Completed
 
 Move items here when done, then archive to CHANGELOG.md periodically:
-
+- [x] Merge OSM Content to main data
+- [x] Import OSM data to database
 - [x] Database schema design and implementation
 - [x] Legacy data import (538 restaurants)
 - [x] OSM data collection scripts
