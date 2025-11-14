@@ -122,26 +122,10 @@ This document records key technical and architectural decisions made during Detr
 
 **Sources**:
 1. **Legacy data** (Implemented): Original DetroitChow.com dataset (538 restaurants, 15 years old)
-2. **OpenStreetMap** (Collected, not imported): Community-maintained POI data
+2. **OpenStreetMap** (imported): Community-maintained POI data
 3. **Google Places API** (Planned): Current business information
 4. **Yelp API** (Planned): Reviews and ratings
 5. **Social media** (Planned): Facebook, Instagram, Twitter links
-
-**Rationale**:
-- Each source provides unique value:
-  - Legacy: Historical Detroit food scene context
-  - OSM: Community-validated locations, especially new establishments
-  - Google Places: Current hours, phone, status (open/closed)
-  - Yelp: User reviews and ratings
-  - Social media: Real-time updates and engagement
-- `locationid` format encodes source for traceability
-- Conflict resolution handled in application (e.g., prefer Google for hours, Yelp for ratings)
-
-**Trade-offs**:
-- Increased complexity in data import and deduplication
-- Need merge/conflict resolution logic
-- API rate limits and costs
-- Data freshness varies by source
 
 ---
 

@@ -7,10 +7,10 @@ Active work items, blockers, and immediate next steps for DetroitChow developmen
 ---
 
 ## In Progress
-- [ ] 65 OSM with NO Zip code
 - [ ] 577 OSM with NO phone
 - [ ] 1161 OSM with website
 - [ ] Data Cleansing, verify address, verify postal code, verify status with Google API
+
 ---
 
 ## Up Next (Prioritized)
@@ -114,6 +114,7 @@ Things to consider but not prioritized yet:
 ## Recently Completed
 
 Move items here when done, then archive to CHANGELOG.md periodically:
+- [x] 65 OSM with NO Zip code
 - [x] dedup locations post OSM
 - [x] Merge OSM Content to main data
 - [x] Import OSM data to database
