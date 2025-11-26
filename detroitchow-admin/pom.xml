@@ -263,8 +263,6 @@
                     </includes>
                 </configuration>
             </plugin>
-
-            <!-- JaCoCo for test coverage reports -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>

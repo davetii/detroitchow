@@ -14,12 +14,5 @@ public interface MenuRepository extends JpaRepository<Menu, String> {
 
     @Query("SELECT m FROM Menu m WHERE m.locationid = :locationid ORDER BY m.priority ASC")
     List<Menu> findByLocationidOrderByPriority(@Param("locationid") String locationid);
-
-    Optional<Menu> findByMenuLink(String menuLink);
-
-    @Query("SELECT m FROM Menu m WHERE m.locationid = :locationid AND m.menuLink = :menuLink")
-    Optional<Menu> findByLocationidAndMenuLink(@Param("locationid") String locationid, 
-                                               @Param("menuLink") String menuLink);
-
     void deleteByLocationid(String locationid);
 }

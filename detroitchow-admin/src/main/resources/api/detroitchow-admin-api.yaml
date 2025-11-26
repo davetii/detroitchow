@@ -29,47 +29,15 @@ paths:
       summary: Get all Detroit Chow locations
       description: Returns a list of all Detroit Chow restaurant locations
       operationId: getAllLocations
-      parameters:
-        - name: status
-          in: query
-          description: Filter locations by status
-          schema:
-            type: string
-            enum: [active, inactive, pending]
-        - name: limit
-          in: query
-          description: Maximum number of results to return
-          schema:
-            type: integer
-            default: 100
-            minimum: 1
-            maximum: 1000
-        - name: offset
-          in: query
-          description: Number of results to skip (for pagination)
-          schema:
-            type: integer
-            default: 0
-            minimum: 0
       responses:
         '200':
           description: Successfully retrieved all locations
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Location'
-                  total:
-                    type: integer
-                    description: Total number of locations available
-                  limit:
-                    type: integer
-                  offset:
-                    type: integer
+                type: array
+                items:
+                  $ref: '#/components/schemas/Location'
         '500':
           $ref: '#/components/responses/InternalServerError'
 
@@ -539,7 +507,7 @@ components:
           nullable: true
         status:
           type: string
-          enum: [active, inactive, pending]
+          enum: [active, temporarily_closed, permanently_closed]
           default: active
         address1:
           type: string

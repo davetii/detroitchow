@@ -30,26 +30,12 @@ public class LocationsController {
      * GET /locations - Get all locations with optional filtering and pagination
      */
     @GetMapping("/locations")
-    public ResponseEntity<Map<String, Object>> getAllLocations(
-            @RequestParam(required = false) String status,
-            @RequestParam(defaultValue = "100") int limit,
-            @RequestParam(defaultValue = "0") int offset) {
-        
-        log.debug("Getting all locations with status={}, limit={}, offset={}", status, limit, offset);
-        
-        Page<Location> locations = locationService.getAllLocations(status, limit, offset);
-        
-        List<LocationDto> locationDtos = locations.getContent().stream()
+    public ResponseEntity<List<LocationDto>> getAllLocations() {
+        List<Location> locations = locationService.getAllLocations();
+        List<LocationDto> locationDtos = locations.stream()
                 .map(locationMapper::toDto)
                 .collect(Collectors.toList());
-        
-        Map<String, Object> response = new HashMap<>();
-        response.put("data", locationDtos);
-        response.put("total", locations.getTotalElements());
-        response.put("limit", limit);
-        response.put("offset", offset);
-        
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(locationDtos);
     }
 
     /**

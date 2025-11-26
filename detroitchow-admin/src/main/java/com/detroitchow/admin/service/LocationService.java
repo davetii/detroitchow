@@ -23,15 +23,8 @@ import java.util.UUID;
 public class LocationService {
 
     private final LocationRepository locationRepository;
-    public Page<Location> getAllLocations(String status, int limit, int offset) {
-        Pageable pageable = PageRequest.of(offset / limit, limit);
-        
-        if (status != null && !status.isEmpty()) {
-            Location.LocationStatus locationStatus = Location.LocationStatus.valueOf(status);
-            return locationRepository.findByStatus(locationStatus, pageable);
-        }
-        
-        return locationRepository.findAll(pageable);
+    public List<Location> getAllLocations() {
+        return locationRepository.getAllLocations();
     }
 
     public Optional<Location> getLocationById(String id) {
@@ -101,14 +94,6 @@ public class LocationService {
 
     private String generateLocationId() {
         return "loc_" + UUID.randomUUID().toString().substring(0, 8);
-    }
-
-    public List<Location> getLocationsByCity(String city) {
-        return locationRepository.findByCity(city);
-    }
-
-    public List<Location> getLocationsByRegion(String region) {
-        return locationRepository.findByRegion(region);
     }
 
     public static class LocationNotFoundException extends RuntimeException {

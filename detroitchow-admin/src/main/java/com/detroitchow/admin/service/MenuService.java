@@ -35,13 +35,6 @@ public class MenuService {
     }
 
     /**
-     * Get a specific menu by location ID and menu link
-     */
-    public Optional<Menu> getMenuByLocationIdAndMenuLink(String locationId, String menuLink) {
-        return menuRepository.findByLocationidAndMenuLink(locationId, menuLink);
-    }
-
-    /**
      * Create a new menu for a location
      */
     public Menu createMenu(String locationId, Menu menu) {
@@ -63,82 +56,6 @@ public class MenuService {
         Menu saved = menuRepository.save(menu);
         log.info("Menu created for location: {}", locationId);
         return saved;
-    }
-
-    /**
-     * Update an existing menu
-     */
-    public Menu updateMenu(String locationId, String menuLink, Menu menu) {
-        Optional<Menu> existing = menuRepository.findByLocationidAndMenuLink(locationId, menuLink);
-        
-        if (existing.isEmpty()) {
-            throw new MenuNotFoundException("Menu not found for location: " + locationId + ", menu: " + menuLink);
-        }
-
-        Menu existingMenu = existing.get();
-        
-        // Update fields
-        if (menu.getDescr() != null) {
-            existingMenu.setDescr(menu.getDescr());
-        }
-        if (menu.getMenuLink() != null && !menu.getMenuLink().equals(menuLink)) {
-            existingMenu.setMenuLink(menu.getMenuLink());
-        }
-        if (menu.getPriority() != null) {
-            existingMenu.setPriority(menu.getPriority());
-        }
-        if (menu.getImage() != null) {
-            existingMenu.setImage(menu.getImage());
-        }
-        
-        existingMenu.setUpdatedDate(OffsetDateTime.now());
-
-        Menu updated = menuRepository.save(existingMenu);
-        log.info("Menu updated for location: {}", locationId);
-        return updated;
-    }
-
-    /**
-     * Delete a menu
-     */
-    public void deleteMenu(String locationId, String menuLink) {
-        Optional<Menu> menu = menuRepository.findByLocationidAndMenuLink(locationId, menuLink);
-        
-        if (menu.isEmpty()) {
-            throw new MenuNotFoundException("Menu not found for location: " + locationId + ", menu: " + menuLink);
-        }
-        
-        menuRepository.delete(menu.get());
-        log.info("Menu deleted for location: {}", locationId);
-    }
-
-    /**
-     * Reorder menus by setting new priorities
-     * The list order represents the desired priority (first item = priority 0)
-     */
-    public List<Menu> reorderMenus(String locationId, List<String> menuLinks) {
-        List<Menu> menus = menuRepository.findByLocationidOrderByPriority(locationId);
-        
-        if (menus.isEmpty()) {
-            throw new MenuNotFoundException("No menus found for location: " + locationId);
-        }
-
-        // Update priorities based on the provided order
-        for (int i = 0; i < menuLinks.size(); i++) {
-            String menuLink = menuLinks.get(i);
-            Optional<Menu> menu = menus.stream()
-                    .filter(m -> m.getMenuLink().equals(menuLink))
-                    .findFirst();
-            
-            if (menu.isPresent()) {
-                menu.get().setPriority(i);
-                menu.get().setUpdatedDate(OffsetDateTime.now());
-                menuRepository.save(menu.get());
-            }
-        }
-
-        log.info("Menus reordered for location: {}", locationId);
-        return menuRepository.findByLocationidOrderByPriority(locationId);
     }
 
     /**
