@@ -2,19 +2,19 @@
 
 ## Data
 - [x] PostgreSQL
-- [ ] Populate Core Data  (In Progress)
-- [ ] Data Cleansing, verify address, verify postal code, verify status
+- [x] Populate Core Data
+- [x] Data Cleansing, verify address, verify postal code, verify status
 - [ ] Hours Calculator
 - [ ] pop tags
 
 
 ## Core Platform
 - [x] PostgreSQL + PostGIS setup
-- [ ] Admin Service
+- [ ] Admin Service (in progress)
 - [ ] Consumer Service
 
 ## Admin Tool
-- [ ] Search For Loctions
+- [ ] Search For Locations
 - [ ] Create locations
 - [ ] Update Locations
 - [ ] Delete Loations

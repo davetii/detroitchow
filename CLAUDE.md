@@ -25,7 +25,13 @@ DetroitChow is a restaurant discovery platform for Metro Detroit that aggregates
 ## Technology Stack
 
 - **Database:** PostgreSQL (schema: `detroitchow`)
-- **Backend (Planned):** Spring Boot (Java) with RESTful API
+- **Backend Admin API:** Spring Boot 3.4.10 (Java 21) with RESTful API
+  - OpenAPI 3.0 specification-driven design
+  - Liquibase for database migrations
+  - JPA/Hibernate for ORM
+  - Testing: JUnit 5, Mockito, Cucumber BDD
+  - Development: H2 in-memory database
+  - Production: PostgreSQL with HikariCP connection pooling
 - **Frontend Admin Tool:** TBD (React, Vue, or similar)
 - **Frontend (Pending):** TBD (React, Vue, or similar)
 - **Data Scripts:** Python for data collection and migration
@@ -144,6 +150,79 @@ Both scripts:
 - Manual submissions
 - Web scraping (ethical, respecting robots.txt)
 
+## Spring Boot Admin API Development
+
+Located in `detroitchow-admin/`
+
+### Building and Running
+
+**Build the project:**
+```bash
+cd detroitchow-admin
+mvn clean package
+```
+
+**Run with H2 (development):**
+```bash
+mvn spring-boot:run -Dspring-boot.run.arguments="--spring.profiles.active=test"
+```
+
+**Run with PostgreSQL (production):**
+```bash
+export DB_HOST=localhost DB_PORT=5432 DB_NAME=detroitchow
+export DB_USER=detroitchow_owner DB_PASSWORD=your_password
+mvn spring-boot:run -Dspring-boot.run.arguments="--spring.profiles.active=prod"
+```
+
+### OpenAPI Code Generation
+
+The API is designed using OpenAPI 3.0 specification. Controller interfaces and model classes are generated from the spec:
+
+```bash
+cd detroitchow-admin
+mvn openapi-generator:generate
+```
+
+Generated files: `target/generated-sources/openapi/`
+
+### API Endpoints
+
+- Base URL: `http://localhost:8080/api/v1`
+- Swagger UI: `http://localhost:8080/api/v1/swagger-ui.html`
+- API Spec: `detroitchow-admin/src/main/resources/api/detroitchow-admin-api.yaml`
+
+**Key Endpoints:**
+- `GET /api/v1/locations` - List all locations (with pagination/filtering)
+- `POST /api/v1/location` - Create location
+- `PUT /api/v1/location` - Update location
+- `DELETE /api/v1/location/{id}` - Delete location
+- `GET /api/v1/location/{locationId}/menus` - Get menus for a location
+- `POST /api/v1/location/{locationId}/menus` - Add menu to a location
+
+### Testing
+
+**Run all tests:**
+```bash
+cd detroitchow-admin
+mvn test
+```
+
+**Run specific test:**
+```bash
+mvn test -Dtest=LocationServiceTest
+```
+
+### Database Migrations
+
+Managed by Liquibase. Migrations run automatically on startup.
+
+**Location:** `detroitchow-admin/src/main/resources/db/changelog/`
+
+**Manual migration:**
+```bash
+mvn liquibase:update
+```
+
 ## Python Development
 
 **Activate virtual environment:**
@@ -184,11 +263,29 @@ python osm_restaurant_importer.py
 ```
 detroitchow/
 ├── database/
-│   └── schema.sql              # Current production schema
+│   ├── schema.sql              # Current production schema
+│   └── google-places.sql       # Google Places import SQL
 ├── data/
 │   ├── legacy/                 # Original 15-year-old dataset (2 JSON files)
 │   ├── imports/                # Generated SQL import files
 │   └── osm-raw/                # OpenStreetMap query results by county
+├── detroitchow-admin/          # Spring Boot Admin API
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/com/detroitchow/admin/
+│   │   │   │   ├── controller/       # REST controllers
+│   │   │   │   ├── service/          # Business logic
+│   │   │   │   ├── entity/           # JPA entities
+│   │   │   │   ├── repository/       # Data access layer
+│   │   │   │   ├── dto/              # Data transfer objects
+│   │   │   │   └── mapper/           # Entity-DTO mappers
+│   │   │   └── resources/
+│   │   │       ├── application*.yml  # Spring Boot configuration
+│   │   │       ├── api/              # OpenAPI specification
+│   │   │       └── db/changelog/     # Liquibase migrations
+│   │   └── test/                     # Unit & integration tests
+│   ├── pom.xml                       # Maven build configuration
+│   └── README.md                     # Admin API documentation
 ├── scripts/
 │   └── data-collect/           # OSM data collection scripts + city-level results
 ├── venv/                       # Python virtual environment
@@ -207,13 +304,23 @@ detroitchow/
 - Initial data migration from legacy JSON (538 locations)
 - OpenStreetMap data collection scripts
 - Extensive OSM data collection (Metro Detroit counties and cities)
+- **Backend Admin API (detroitchow-admin):**
+  - Spring Boot 3.4.10 application with Java 21
+  - OpenAPI 3.0 specification and code generation
+  - Location and Menu management endpoints
+  - JPA entities, repositories, services, and controllers
+  - Liquibase database migrations
+  - Comprehensive testing suite (JUnit, Mockito, Cucumber)
+  - Swagger UI for API documentation
+  - Multi-profile support (test/H2, prod/PostgreSQL)
 
 🚧 **In Progress:**
-- Technology stack finalization
-- Development environment setup
+- Google Places API integration
+- Frontend Admin Tool development
 
 📋 **Planned:**
-- Backend API development (Spring Boot)
-- Frontend implementation
-- Mobile app development
+- Public-facing frontend implementation
+- Mobile app development (Android/iOS)
 - Social media aggregation features
+- Authentication and authorization
+- Rate limiting and caching

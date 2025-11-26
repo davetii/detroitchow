@@ -1,0 +1,848 @@
+openapi: 3.0.0
+info:
+  title: Detroit Chow Admin API
+  version: 1.0.0
+  description: |
+    Admin API for managing Detroit Chow restaurant locations.
+    Provides endpoints for viewing, creating, and updating location data,
+    with capabilities to compare against Google Places and other data sources.
+  contact:
+    name: Detroit Chow Admin Team
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Development Server
+  - url: https://api.detroitchow.com/api/v1
+    description: Production Server
+
+tags:
+  - name: Locations
+    description: Operations for managing Detroit Chow locations
+  - name: Menus
+    description: Operations for managing location menus
+
+paths:
+  /locations:
+    get:
+      tags:
+        - Locations
+      summary: Get all Detroit Chow locations
+      description: Returns a list of all Detroit Chow restaurant locations
+      operationId: getAllLocations
+      parameters:
+        - name: status
+          in: query
+          description: Filter locations by status
+          schema:
+            type: string
+            enum: [active, inactive, pending]
+        - name: limit
+          in: query
+          description: Maximum number of results to return
+          schema:
+            type: integer
+            default: 100
+            minimum: 1
+            maximum: 1000
+        - name: offset
+          in: query
+          description: Number of results to skip (for pagination)
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+      responses:
+        '200':
+          description: Successfully retrieved all locations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Location'
+                  total:
+                    type: integer
+                    description: Total number of locations available
+                  limit:
+                    type: integer
+                  offset:
+                    type: integer
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /location/{id}:
+    get:
+      tags:
+        - Locations
+      summary: Get a specific Detroit Chow location
+      description: Returns detailed information for a specific location by ID
+      operationId: getLocationById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The location ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved the location
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Location'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /location:
+    post:
+      tags:
+        - Locations
+      summary: Create a new Detroit Chow location
+      description: Creates a new Detroit Chow restaurant location
+      operationId: createLocation
+      requestBody:
+        required: true
+        description: Location object to be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocationInput'
+      responses:
+        '201':
+          description: Location successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Location'
+                  message:
+                    type: string
+                    example: Location created successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      tags:
+        - Locations
+      summary: Update a Detroit Chow location
+      description: Updates all fields for a given Detroit Chow location
+      operationId: updateLocation
+      requestBody:
+        required: true
+        description: Location object with updated information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Location'
+      responses:
+        '200':
+          description: Location successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Location'
+                  message:
+                    type: string
+                    example: Location updated successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /location/{locationId}/menus:
+    get:
+      tags:
+        - Menus
+      summary: Get all menus for a location
+      description: Returns all menus for a specific location, ordered by priority
+      operationId: getLocationMenus
+      parameters:
+        - name: locationId
+          in: path
+          required: true
+          description: The location ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved menus
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Menu'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags:
+        - Menus
+      summary: Add a menu to a location
+      description: Adds a new menu to a location
+      operationId: addMenuToLocation
+      parameters:
+        - name: locationId
+          in: path
+          required: true
+          description: The location ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        description: Menu object to be added
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MenuInput'
+      responses:
+        '201':
+          description: Menu successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Menu'
+                  message:
+                    type: string
+                    example: Menu added successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /location/{locationId}/menus/{menuId}:
+    get:
+      tags:
+        - Menus
+      summary: Get a specific menu
+      description: Returns a specific menu by location and menu ID
+      operationId: getMenu
+      parameters:
+        - name: locationId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: menuId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved the menu
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Menu'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      tags:
+        - Menus
+      summary: Update a menu
+      description: Updates a menu's information including priority
+      operationId: updateMenu
+      parameters:
+        - name: locationId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: menuId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        description: Menu object with updated information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MenuInput'
+      responses:
+        '200':
+          description: Menu successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Menu'
+                  message:
+                    type: string
+                    example: Menu updated successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags:
+        - Menus
+      summary: Delete a menu
+      description: Removes a menu from a location
+      operationId: deleteMenu
+      parameters:
+        - name: locationId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: menuId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Menu successfully deleted
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /location/{locationId}/menus/reorder:
+    post:
+      tags:
+        - Menus
+      summary: Reorder menus by priority
+      description: Updates the priority/order of multiple menus at once
+      operationId: reorderMenus
+      parameters:
+        - name: locationId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        description: Array of menu IDs in desired priority order
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - menuIds
+              properties:
+                menuIds:
+                  type: array
+                  description: Array of menu IDs in order (first item = highest priority)
+                  items:
+                    type: string
+                  example: ["menu_001", "menu_002", "menu_003"]
+      responses:
+        '200':
+          description: Menus successfully reordered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Menu'
+                  message:
+                    type: string
+                    example: Menus reordered successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  schemas:
+    Location:
+      type: object
+      description: Detroit Chow location with all fields including menus and Google Places data
+      required:
+        - locationid
+        - name
+        - address1
+        - city
+        - region
+        - zip
+      properties:
+        locationid:
+          type: string
+          description: Unique identifier for the location
+          example: "loc_12345"
+        name:
+          type: string
+          description: Restaurant name
+          example: "Joe's Pizza"
+        description:
+          type: string
+          description: Description of the restaurant
+          nullable: true
+        status:
+          type: string
+          enum: [active, inactive, pending]
+          default: active
+          description: Current status of the location
+        address1:
+          type: string
+          description: Primary address line
+          example: "123 Main Street"
+        address2:
+          type: string
+          description: Secondary address line (apartment, suite, etc.)
+          nullable: true
+        city:
+          type: string
+          description: City name
+          example: "Detroit"
+        locality:
+          type: string
+          description: Locality or neighborhood
+          nullable: true
+        zip:
+          type: string
+          description: ZIP/Postal code
+          example: "48201"
+        region:
+          type: string
+          description: State or province
+          example: "Michigan"
+        country:
+          type: string
+          description: Country name
+          example: "United States"
+          default: "United States"
+        phone1:
+          type: string
+          description: Primary phone number
+          nullable: true
+          example: "+1-313-555-1234"
+        phone2:
+          type: string
+          description: Secondary phone number
+          nullable: true
+        lat:
+          type: number
+          format: double
+          description: Latitude coordinate
+          example: 42.3314
+        lng:
+          type: number
+          format: double
+          description: Longitude coordinate
+          example: -83.0458
+        website:
+          type: string
+          description: Restaurant website URL
+          nullable: true
+          format: uri
+        facebook:
+          type: string
+          description: Facebook page URL
+          nullable: true
+          format: uri
+        twitter:
+          type: string
+          description: Twitter/X profile URL
+          nullable: true
+          format: uri
+        instagram:
+          type: string
+          description: Instagram profile URL
+          nullable: true
+          format: uri
+        opentable:
+          type: string
+          description: OpenTable reservation link
+          nullable: true
+          format: uri
+        tripadvisor:
+          type: string
+          description: TripAdvisor page URL
+          nullable: true
+          format: uri
+        yelp:
+          type: string
+          description: Yelp business page URL
+          nullable: true
+          format: uri
+        hours:
+          type: string
+          description: Operating hours (format TBD - may be structured in future)
+          nullable: true
+        contact_text:
+          type: string
+          description: Contact information text
+          nullable: true
+        menus:
+          type: array
+          description: Array of menus associated with this location, ordered by priority
+          items:
+            $ref: '#/components/schemas/Menu'
+        googlePlaces:
+          $ref: '#/components/schemas/GooglePlaces'
+
+    LocationInput:
+      type: object
+      description: Input schema for creating a new location (locationid not required on creation)
+      required:
+        - name
+        - address1
+        - city
+        - region
+        - zip
+      properties:
+        name:
+          type: string
+          description: Restaurant name
+        description:
+          type: string
+          description: Description of the restaurant
+          nullable: true
+        status:
+          type: string
+          enum: [active, inactive, pending]
+          default: active
+        address1:
+          type: string
+          description: Primary address line
+        address2:
+          type: string
+          description: Secondary address line
+          nullable: true
+        city:
+          type: string
+          description: City name
+        locality:
+          type: string
+          description: Locality or neighborhood
+          nullable: true
+        zip:
+          type: string
+          description: ZIP/Postal code
+        region:
+          type: string
+          description: State or province
+        country:
+          type: string
+          description: Country name
+          default: "United States"
+        phone1:
+          type: string
+          description: Primary phone number
+          nullable: true
+        phone2:
+          type: string
+          description: Secondary phone number
+          nullable: true
+        lat:
+          type: number
+          format: double
+          description: Latitude coordinate
+        lng:
+          type: number
+          format: double
+          description: Longitude coordinate
+        website:
+          type: string
+          description: Restaurant website URL
+          nullable: true
+          format: uri
+        facebook:
+          type: string
+          description: Facebook page URL
+          nullable: true
+          format: uri
+        twitter:
+          type: string
+          description: Twitter/X profile URL
+          nullable: true
+          format: uri
+        instagram:
+          type: string
+          description: Instagram profile URL
+          nullable: true
+          format: uri
+        opentable:
+          type: string
+          description: OpenTable reservation link
+          nullable: true
+          format: uri
+        tripadvisor:
+          type: string
+          description: TripAdvisor page URL
+          nullable: true
+          format: uri
+        yelp:
+          type: string
+          description: Yelp business page URL
+          nullable: true
+          format: uri
+        hours:
+          type: string
+          description: Operating hours
+          nullable: true
+        contact_text:
+          type: string
+          description: Contact information text
+          nullable: true
+        menus:
+          type: array
+          description: Array of menus associated with this location
+          items:
+            $ref: '#/components/schemas/MenuInput'
+        googlePlaces:
+          $ref: '#/components/schemas/GooglePlacesInput'
+
+    Menu:
+      type: object
+      description: Menu associated with a Detroit Chow location
+      required:
+        - priority
+      properties:
+        descr:
+          type: string
+          description: Description of the menu
+          nullable: true
+          example: "Lunch Menu"
+        menu_link:
+          type: string
+          description: URL to the menu (PDF, image, or external link)
+          nullable: true
+          format: uri
+          example: "https://detroitchow.com/menus/lunch-menu.pdf"
+        priority:
+          type: integer
+          description: Display priority for ordering menus (lower number = higher priority/displayed first)
+          minimum: 0
+          example: 1
+
+    MenuInput:
+      type: object
+      description: Input schema for creating or updating a menu
+      required:
+        - priority
+      properties:
+        descr:
+          type: string
+          description: Description of the menu
+          nullable: true
+        menu_link:
+          type: string
+          description: URL to the menu (PDF, image, or external link)
+          nullable: true
+          format: uri
+        priority:
+          type: integer
+          description: Display priority for ordering menus (lower number = higher priority/displayed first)
+          minimum: 0
+
+    GooglePlaces:
+      type: object
+      description: Google Places data associated with a location
+      nullable: true
+      properties:
+        place_id:
+          type: string
+          description: Google Places API place ID
+          example: "ChIJN1blFLsB6IkRv5ZSZsJVHmM"
+        name:
+          type: string
+          description: Business name from Google Places
+        lat:
+          type: number
+          format: double
+          description: Latitude from Google Places
+        lng:
+          type: number
+          format: double
+          description: Longitude from Google Places
+        phone1:
+          type: string
+          description: Primary phone number from Google Places
+          nullable: true
+        phone2:
+          type: string
+          description: Secondary phone number from Google Places
+          nullable: true
+        formatted_address:
+          type: string
+          description: Formatted address from Google Places
+        website:
+          type: string
+          description: Website URL from Google Places
+          nullable: true
+          format: uri
+        google_url:
+          type: string
+          description: Google Maps business URL
+          nullable: true
+          format: uri
+        business_status:
+          type: string
+          enum: [OPERATIONAL, CLOSED_TEMPORARILY, CLOSED_PERMANENTLY]
+          description: Current business status from Google Places
+        txtsearch_json:
+          type: object
+          description: Raw JSON response from Google Places Text Search API
+          nullable: true
+          additionalProperties: true
+        detail_json:
+          type: object
+          description: Raw JSON response from Google Places Detail Search API
+          nullable: true
+          additionalProperties: true
+        store_json:
+          type: object
+          description: Raw JSON response from Google Places Nearby Search API
+          nullable: true
+          additionalProperties: true
+
+    GooglePlacesInput:
+      type: object
+      description: Google Places data input (for creation/updates)
+      nullable: true
+      properties:
+        place_id:
+          type: string
+          description: Google Places API place ID
+        name:
+          type: string
+          description: Business name from Google Places
+        lat:
+          type: number
+          format: double
+          description: Latitude from Google Places
+        lng:
+          type: number
+          format: double
+          description: Longitude from Google Places
+        phone1:
+          type: string
+          description: Primary phone number from Google Places
+          nullable: true
+        phone2:
+          type: string
+          description: Secondary phone number from Google Places
+          nullable: true
+        formatted_address:
+          type: string
+          description: Formatted address from Google Places
+        website:
+          type: string
+          description: Website URL from Google Places
+          nullable: true
+          format: uri
+        google_url:
+          type: string
+          description: Google Maps business URL
+          nullable: true
+          format: uri
+        business_status:
+          type: string
+          enum: [OPERATIONAL, CLOSED_TEMPORARILY, CLOSED_PERMANENTLY]
+          description: Current business status from Google Places
+        txtsearch_json:
+          type: object
+          description: Raw JSON response from Google Places Text Search API
+          nullable: true
+          additionalProperties: true
+        detail_json:
+          type: object
+          description: Raw JSON response from Google Places Detail Search API
+          nullable: true
+          additionalProperties: true
+        store_json:
+          type: object
+          description: Raw JSON response from Google Places Nearby Search API
+          nullable: true
+          additionalProperties: true
+
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: object
+          description: Additional error details
+          nullable: true
+
+  responses:
+    BadRequest:
+      description: Bad Request - Invalid input parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: "BAD_REQUEST"
+            message: "Invalid request body"
+            details:
+              field: "name"
+              reason: "Name is required"
+
+    NotFound:
+      description: Not Found - Resource does not exist
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: "NOT_FOUND"
+            message: "Location not found"
+
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: "INTERNAL_SERVER_ERROR"
+            message: "An unexpected error occurred"

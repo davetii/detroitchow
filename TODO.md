@@ -2,24 +2,16 @@
 
 Active work items, blockers, and immediate next steps for DetroitChow development.
 
-**Last Updated**: 2025-11-10
+**Last Updated**: 2025-11-25
 
 ---
-
-## In Progress
-- [ ] 577 OSM with NO phone
-- [ ] 1161 OSM with website
-- [ ] Data Cleansing, verify address, verify postal code, verify status with Google API
-
+- [ ] Implement Admin Service
 ---
 
 ## Up Next (Prioritized)
 - [ ] technical decision on back end batch processing, data cleansing, job scheduling, etc..
 
 ## Major Features
-- [ ] Data Phase (Schema generation, Populate locations)
-- [ ] Spec for Admin Service
-- [ ] Implement Admin Service
 - [ ] Implement Admin Tool front end
 - [ ] Spec for Consumer Service
 - [ ] Implement Consumer Service
@@ -114,6 +106,7 @@ Things to consider but not prioritized yet:
 ## Recently Completed
 
 Move items here when done, then archive to CHANGELOG.md periodically:
+- [x] Spec for Admin Service
 - [x] 65 OSM with NO Zip code
 - [x] dedup locations post OSM
 - [x] Merge OSM Content to main data

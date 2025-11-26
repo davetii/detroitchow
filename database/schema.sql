@@ -59,6 +59,8 @@ CREATE TABLE detroitchow.locations (
     tripadvisor VARCHAR(2000),
     yelp VARCHAR(2000),
     hours VARCHAR(2000),
+    contact_text VARCHAR(2000),
+    google_placeid  VARCHAR(100),
     create_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     create_user VARCHAR(100),
     updated_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,

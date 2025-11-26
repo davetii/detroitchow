@@ -1,0 +1,510 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-schema
+      author: detroitchow
+      changes:
+        - sql:
+            sql: CREATE SCHEMA IF NOT EXISTS detroitchow;
+            splitStatements: true
+
+  - changeSet:
+      id: 002-create-extensions
+      author: detroitchow
+      dbms: postgresql
+      changes:
+        - sql:
+            sql: CREATE EXTENSION IF NOT EXISTS fuzzystrmatch WITH SCHEMA detroitchow;
+            splitStatements: true
+        - sql:
+            sql: CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA detroitchow;
+            splitStatements: true
+
+  - changeSet:
+      id: 003-create-location-status-enum
+      author: detroitchow
+      dbms: postgresql
+      changes:
+        - sql:
+            sql: CREATE TYPE detroitchow.location_status AS ENUM ('active', 'temporarily_closed', 'permanently_closed');
+            splitStatements: true
+
+  - changeSet:
+      id: 004-create-update-audit-function
+      author: detroitchow
+      dbms: postgresql
+      changes:
+        - sql:
+            sql: |
+              CREATE OR REPLACE FUNCTION detroitchow.update_audit_columns() RETURNS trigger AS $$
+              BEGIN
+                IF (TG_OP = 'INSERT') THEN
+                  NEW.create_date = CURRENT_TIMESTAMP;
+                  NEW.create_user = CURRENT_USER;
+                  NEW.updated_date = CURRENT_TIMESTAMP;
+                  NEW.update_user = CURRENT_USER;
+                ELSIF (TG_OP = 'UPDATE') THEN
+                  NEW.create_date = OLD.create_date;
+                  NEW.create_user = OLD.create_user;
+                  NEW.updated_date = CURRENT_TIMESTAMP;
+                  NEW.update_user = CURRENT_USER;
+                END IF;
+                RETURN NEW;
+              END;
+              $$ LANGUAGE plpgsql;
+            splitStatements: false
+
+  - changeSet:
+      id: 005-create-locations-table-postgresql
+      author: detroitchow
+      dbms: postgresql
+      changes:
+        - createTable:
+            tableName: locations
+            schemaName: detroitchow
+            columns:
+              - column:
+                  name: locationid
+                  type: varchar(50)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(2000)
+              - column:
+                  name: status
+                  type: detroitchow.location_status
+                  defaultValue: 'active'
+              - column:
+                  name: address1
+                  type: varchar(500)
+              - column:
+                  name: address2
+                  type: varchar(500)
+              - column:
+                  name: city
+                  type: varchar(100)
+              - column:
+                  name: locality
+                  type: varchar(100)
+              - column:
+                  name: zip
+                  type: varchar(100)
+              - column:
+                  name: region
+                  type: varchar(100)
+              - column:
+                  name: country
+                  type: varchar(2)
+              - column:
+                  name: phone1
+                  type: varchar(20)
+              - column:
+                  name: phone2
+                  type: varchar(20)
+              - column:
+                  name: lat
+                  type: varchar(100)
+              - column:
+                  name: lng
+                  type: varchar(100)
+              - column:
+                  name: website
+                  type: varchar(2000)
+              - column:
+                  name: facebook
+                  type: varchar(2000)
+              - column:
+                  name: twitter
+                  type: varchar(2000)
+              - column:
+                  name: instagram
+                  type: varchar(2000)
+              - column:
+                  name: opentable
+                  type: varchar(2000)
+              - column:
+                  name: tripadvisor
+                  type: varchar(2000)
+              - column:
+                  name: yelp
+                  type: varchar(2000)
+              - column:
+                  name: hours
+                  type: varchar(2000)
+              - column:
+                  name: contact_text
+                  type: varchar(2000)
+              - column:
+                  name: create_date
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: create_user
+                  type: varchar(100)
+              - column:
+                  name: updated_date
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: update_user
+                  type: varchar(100)
+
+  - changeSet:
+      id: 005-create-locations-table-h2
+      author: detroitchow
+      dbms: h2
+      changes:
+        - createTable:
+            tableName: locations
+            schemaName: detroitchow
+            columns:
+              - column:
+                  name: locationid
+                  type: varchar(50)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(2000)
+              - column:
+                  name: status
+                  type: varchar(50)
+                  defaultValue: 'active'
+              - column:
+                  name: address1
+                  type: varchar(500)
+              - column:
+                  name: address2
+                  type: varchar(500)
+              - column:
+                  name: city
+                  type: varchar(100)
+              - column:
+                  name: locality
+                  type: varchar(100)
+              - column:
+                  name: zip
+                  type: varchar(100)
+              - column:
+                  name: region
+                  type: varchar(100)
+              - column:
+                  name: country
+                  type: varchar(2)
+              - column:
+                  name: phone1
+                  type: varchar(20)
+              - column:
+                  name: phone2
+                  type: varchar(20)
+              - column:
+                  name: lat
+                  type: varchar(100)
+              - column:
+                  name: lng
+                  type: varchar(100)
+              - column:
+                  name: website
+                  type: varchar(2000)
+              - column:
+                  name: facebook
+                  type: varchar(2000)
+              - column:
+                  name: twitter
+                  type: varchar(2000)
+              - column:
+                  name: instagram
+                  type: varchar(2000)
+              - column:
+                  name: opentable
+                  type: varchar(2000)
+              - column:
+                  name: tripadvisor
+                  type: varchar(2000)
+              - column:
+                  name: yelp
+                  type: varchar(2000)
+              - column:
+                  name: hours
+                  type: varchar(2000)
+              - column:
+                  name: contact_text
+                  type: varchar(2000)
+              - column:
+                  name: create_date
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: create_user
+                  type: varchar(100)
+              - column:
+                  name: updated_date
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: update_user
+                  type: varchar(100)
+
+  - changeSet:
+      id: 006-create-menus-table
+      author: detroitchow
+      changes:
+        - createTable:
+            tableName: menus
+            schemaName: detroitchow
+            columns:
+              - column:
+                  name: locationid
+                  type: varchar(50)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_menus_location
+                    references: detroitchow.locations(locationid)
+              - column:
+                  name: menu_link
+                  type: varchar(2000)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: image
+                  type: varchar(2000)
+              - column:
+                  name: priority
+                  type: integer
+                  defaultValue: 0
+              - column:
+                  name: descr
+                  type: varchar(500)
+              - column:
+                  name: create_date
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: create_user
+                  type: varchar(100)
+              - column:
+                  name: updated_date
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: update_user
+                  type: varchar(100)
+
+  - changeSet:
+      id: 007-create-google-places-table-postgresql
+      author: detroitchow
+      dbms: postgresql
+      changes:
+        - createTable:
+            tableName: google_places
+            schemaName: detroitchow
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: locationid
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: place_id
+                  type: varchar(500)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: lat
+                  type: varchar(50)
+              - column:
+                  name: lng
+                  type: varchar(50)
+              - column:
+                  name: phone1
+                  type: varchar(500)
+              - column:
+                  name: phone2
+                  type: varchar(500)
+              - column:
+                  name: formatted_address
+                  type: varchar(1000)
+              - column:
+                  name: website
+                  type: varchar(1000)
+              - column:
+                  name: google_url
+                  type: varchar(1000)
+              - column:
+                  name: business_status
+                  type: varchar(50)
+              - column:
+                  name: txtsearch_json
+                  type: jsonb
+              - column:
+                  name: detail_json
+                  type: jsonb
+              - column:
+                  name: store_json
+                  type: jsonb
+              - column:
+                  name: premise_place_id
+                  type: varchar(500)
+              - column:
+                  name: store_place_id
+                  type: varchar(500)
+              - column:
+                  name: created_at
+                  type: timestamp without time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+  - changeSet:
+      id: 007-create-google-places-table-h2
+      author: detroitchow
+      dbms: h2
+      changes:
+        - createTable:
+            tableName: google_places
+            schemaName: detroitchow
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: locationid
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: place_id
+                  type: varchar(500)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: lat
+                  type: varchar(50)
+              - column:
+                  name: lng
+                  type: varchar(50)
+              - column:
+                  name: phone1
+                  type: varchar(500)
+              - column:
+                  name: phone2
+                  type: varchar(500)
+              - column:
+                  name: formatted_address
+                  type: varchar(1000)
+              - column:
+                  name: website
+                  type: varchar(1000)
+              - column:
+                  name: google_url
+                  type: varchar(1000)
+              - column:
+                  name: business_status
+                  type: varchar(50)
+              - column:
+                  name: txtsearch_json
+                  type: json
+              - column:
+                  name: detail_json
+                  type: json
+              - column:
+                  name: store_json
+                  type: json
+              - column:
+                  name: premise_place_id
+                  type: varchar(500)
+              - column:
+                  name: store_place_id
+                  type: varchar(500)
+              - column:
+                  name: created_at
+                  type: timestamp without time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+  - changeSet:
+      id: 008-create-indexes
+      author: detroitchow
+      changes:
+        - createIndex:
+            indexName: idx_locations_status
+            tableName: locations
+            schemaName: detroitchow
+            columns:
+              - column:
+                  name: status
+        - createIndex:
+            indexName: idx_locations_city
+            tableName: locations
+            schemaName: detroitchow
+            columns:
+              - column:
+                  name: city
+        - createIndex:
+            indexName: idx_locations_region
+            tableName: locations
+            schemaName: detroitchow
+            columns:
+              - column:
+                  name: region
+        - createIndex:
+            indexName: idx_locations_country
+            tableName: locations
+            schemaName: detroitchow
+            columns:
+              - column:
+                  name: country
+        - createIndex:
+            indexName: idx_locations_locality
+            tableName: locations
+            schemaName: detroitchow
+            columns:
+              - column:
+                  name: locality
+        - createIndex:
+            indexName: idx_locations_status_city
+            tableName: locations
+            schemaName: detroitchow
+            columns:
+              - column:
+                  name: status
+              - column:
+                  name: city
+
+  - changeSet:
+      id: 009-create-triggers
+      author: detroitchow
+      dbms: postgresql
+      changes:
+        - sql:
+            sql: |
+              CREATE TRIGGER trigger_locations_audit BEFORE INSERT OR UPDATE ON detroitchow.locations
+              FOR EACH ROW EXECUTE FUNCTION detroitchow.update_audit_columns();
+            splitStatements: false
+        - sql:
+            sql: |
+              CREATE TRIGGER trigger_menus_audit BEFORE INSERT OR UPDATE ON detroitchow.menus
+              FOR EACH ROW EXECUTE FUNCTION detroitchow.update_audit_columns();
+            splitStatements: false

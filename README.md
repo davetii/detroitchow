@@ -11,7 +11,11 @@ DetroitChow helps users discover restaurants and food markets across Metro Detro
 ## Technology Stack
 
 - **Database:** PostgreSQL (schema: `detroitchow`)
-- **Backend (Planned):** Spring Boot (Java) with RESTful API
+- **Backend Admin API:** Spring Boot 3.4.10 (Java 21) with RESTful API
+  - OpenAPI 3.0 specification-driven design
+  - Liquibase for database migrations
+  - JPA/Hibernate for ORM
+  - Comprehensive testing (JUnit 5, Mockito, Cucumber)
 - **Frontend (Pending):** TBD (React, Vue, or similar)
 - **Data Collection:** Python scripts for data aggregation
 - **Target Platforms:** Web (responsive), Android, iOS
@@ -19,7 +23,9 @@ DetroitChow helps users discover restaurants and food markets across Metro Detro
 ## Prerequisites
 
 - PostgreSQL 12+ installed and running
-- Python 3.8+ with `pip`
+- Java 21+ (for Spring Boot Admin API)
+- Maven 3.8+ (for building Java projects)
+- Python 3.8+ with `pip` (for data collection scripts)
 - Git
 
 ## Quick Start
@@ -37,7 +43,31 @@ psql -U your_user -d detroitchow -f database/schema/schema.sql
 psql -U your_user -d detroitchow -f data/imports/detroitchow_legacy_imports.sql
 ```
 
-### 3. Python Environment
+### 3. Spring Boot Admin API
+
+```bash
+cd detroitchow-admin
+
+# Build the project
+mvn clean package
+
+# Run with H2 in-memory database (development)
+mvn spring-boot:run -Dspring-boot.run.arguments="--spring.profiles.active=test"
+
+# Access API at: http://localhost:8080/api/v1
+# Swagger UI: http://localhost:8080/api/v1/swagger-ui.html
+```
+
+For production PostgreSQL setup:
+```bash
+export DB_HOST=localhost DB_PORT=5432 DB_NAME=detroitchow
+export DB_USER=detroitchow_owner DB_PASSWORD=your_password
+mvn spring-boot:run -Dspring-boot.run.arguments="--spring.profiles.active=prod"
+```
+
+See **[detroitchow-admin/README.md](detroitchow-admin/README.md)** for detailed API documentation.
+
+### 4. Python Environment
 
 ```bash
 python -m venv venv
@@ -52,12 +82,19 @@ See **[DATABASE.md](docs/DATABASE.md)** for detailed setup instructions and **[D
 ```
 detroitchow/
 ├── database/
-│   └── schema/
-│       └── schema.sql              # Database schema with triggers
+│   ├── schema.sql                  # Database schema with triggers
+│   └── google-places.sql           # Google Places import SQL
 ├── data/
 │   ├── legacy/                     # Original 15-year-old dataset
 │   ├── imports/                    # Generated SQL import files
 │   └── osm-raw/                    # OpenStreetMap query results
+├── detroitchow-admin/              # Spring Boot Admin API
+│   ├── src/
+│   │   ├── main/java/              # Java source code
+│   │   ├── main/resources/         # Configuration and OpenAPI spec
+│   │   └── test/                   # Tests (JUnit, Mockito, Cucumber)
+│   ├── pom.xml                     # Maven configuration
+│   └── README.md                   # Admin API documentation
 ├── docs/                           # Documentation
 │   ├── DATABASE.md                 # Database documentation
 │   └── DATA_COLLECTION.md          # Data collection guide
@@ -65,18 +102,31 @@ detroitchow/
 │   └── data-collect/               # Data collection scripts
 ├── venv/                           # Python virtual environment
 ├── CLAUDE.md                       # AI assistant instructions
+├── PROJECT_CONTEXT.md              # Detailed project context
 └── README.md                       # This file
 ```
 
 ## Current Status
 
-**In Progress:**
-- Gathering Dataset phase
-- Batch Backend planning
-- Service API planning
+**✅ Completed:**
+- Database schema design and implementation
+- Legacy data import (538 locations)
+- OpenStreetMap data collection
+- Spring Boot Admin API with Location and Menu management
+- OpenAPI 3.0 specification and code generation
+- Comprehensive testing framework (JUnit, Mockito, Cucumber)
+- Liquibase database migrations
+
+**🚧 In Progress:**
+- Google Places API integration
+- Frontend Admin Tool development
 - **[TODO.md](TODO.md)**
 
-**Planned:**
+**📋 Planned:**
+- Public-facing web frontend
+- Mobile applications (Android/iOS)
+- Social media aggregation
+- Authentication and authorization
 - **[ROADMAP.md](ROADMAP.md)** - Product Backlog
 
 ## Documentation

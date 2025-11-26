@@ -21,19 +21,29 @@ DetroitChow is a comprehensive restaurant discovery platform for Metro Detroit t
 - **Schema:** `detroitchow`
 - **Location:** `database/schema/schema.sql`
 
-### Backend (Planned)
-- **Framework:** Spring Boot (Java)
-- **API Style:** RESTful
-- **Primary Language:** Java
+### Backend Admin API (detroitchow-admin)
+- **Framework:** Spring Boot 3.4.10
+- **Language:** Java 21
+- **API Style:** RESTful (OpenAPI 3.0 specification-driven)
+- **ORM:** JPA/Hibernate
+- **Database Migration:** Liquibase
+- **Testing:** JUnit 5, Mockito, Cucumber BDD
+- **API Documentation:** Swagger UI / Springdoc OpenAPI
+- **Development DB:** H2 in-memory
+- **Production DB:** PostgreSQL with HikariCP
+- **Build Tool:** Maven 3.8+
 
 ### Frontend (Pending Decision)
-- **Web:** TBD (React, Vue, or similar)
+- **Admin Tool:** TBD (React, Vue, or similar)
+- **Public Web:** TBD (React, Vue, or similar)
 - **Mobile:** TBD (Flutter, React Native, or native)
 
 ### Development Tools
 - Python for data migration/scripting
 - Docker for local development
 - Git for version control
+- Maven for Java builds
+- OpenAPI Generator for code generation
 
 ## Database Schema Overview
 
@@ -83,22 +93,37 @@ DetroitChow is a comprehensive restaurant discovery platform for Metro Detroit t
 ```
 detroitchow/
 ├── database/           # All database-related files
-│   ├── schema/
-│   │   ├── schema.sql          # Current production schema
-│   │   └── drop_schema.sql     # Clean drop script
-│   ├── migrations/             # Schema version history
-│   └── seed-data/              # Data import scripts
+│   ├── schema.sql              # Current production schema
+│   └── google-places.sql       # Google Places import SQL
 │
 ├── data/
 │   ├── legacy/                 # Original 15-year-old dataset
 │   ├── imports/                # Generated SQL import files
-│   └── exports/                # Data exports
+│   └── osm-raw/                # OpenStreetMap query results
 │
-├── backend/            # Spring Boot API
-├── web/                # Web frontend
-├── mobile/             # Mobile apps
-├── scripts/            # Utility scripts
-└── docs/               # Project documentation
+├── detroitchow-admin/  # Spring Boot Admin API
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/com/detroitchow/admin/
+│   │   │   │   ├── controller/       # REST controllers
+│   │   │   │   ├── service/          # Business logic
+│   │   │   │   ├── entity/           # JPA entities
+│   │   │   │   ├── repository/       # Data access layer
+│   │   │   │   ├── dto/              # Data transfer objects
+│   │   │   │   └── mapper/           # Entity-DTO mappers
+│   │   │   └── resources/
+│   │   │       ├── application*.yml  # Spring Boot configuration
+│   │   │       ├── api/              # OpenAPI specification
+│   │   │       └── db/changelog/     # Liquibase migrations
+│   │   └── test/                     # Unit & integration tests
+│   ├── pom.xml                       # Maven build configuration
+│   └── README.md                     # Admin API documentation
+│
+├── scripts/
+│   └── data-collect/           # Data collection scripts
+│
+├── venv/               # Python virtual environment
+└── PROJECT_CONTEXT.md  # This file
 ```
 
 ## Current Status
@@ -106,18 +131,30 @@ detroitchow/
 ### ✅ Completed
 - Database schema design and implementation
 - Initial data migration from legacy JSON dataset (538 locations)
+- OpenStreetMap data collection scripts
 - Python migration script (`generate_location_inserts.py`)
 - Schema drop/recreate scripts
+- **Backend Admin API (detroitchow-admin):**
+  - Spring Boot 3.4.10 application with Java 21
+  - OpenAPI 3.0 specification and code generation pipeline
+  - Location and Menu management REST endpoints
+  - JPA entities, repositories, services, controllers, DTOs, and mappers
+  - Liquibase database migration framework
+  - Comprehensive testing suite (JUnit 5, Mockito, Cucumber BDD)
+  - Swagger UI for interactive API documentation
+  - Multi-profile configuration (test/H2, prod/PostgreSQL)
+  - Maven build with OpenAPI Generator plugin
 
 ### 🚧 In Progress
-- Technology stack finalization
-- Development environment setup
+- Google Places API integration
+- Frontend Admin Tool development
 
 ### 📋 Planned
-- Backend API development
-- Frontend implementation
-- Mobile app development
+- Public-facing frontend implementation
+- Mobile app development (Android/iOS)
 - Social media aggregation features
+- Authentication and authorization
+- Rate limiting and caching strategies
 
 ## Data Sources
 
@@ -154,10 +191,12 @@ lng → lng
 
 | File | Purpose | Location |
 |------|---------|----------|
-| schema.sql | Database schema definition | `database/schema/` |
-| drop_schema.sql | Clean schema removal | `database/schema/` |
-| generate_location_inserts.py | JSON to SQL converter | `database/seed-data/` |
-| detroitchow-legacy-538.json | Original dataset | `data/legacy/` |
+| schema.sql | Database schema definition | `database/` |
+| google-places.sql | Google Places import SQL | `database/` |
+| detroitchow-admin-api.yaml | OpenAPI specification | `detroitchow-admin/src/main/resources/api/` |
+| pom.xml | Maven build configuration | `detroitchow-admin/` |
+| application.yml | Main Spring Boot config | `detroitchow-admin/src/main/resources/` |
+| db.changelog-master.yaml | Liquibase master changelog | `detroitchow-admin/src/main/resources/db/changelog/` |
 
 ## Development Conventions
 
@@ -198,6 +237,45 @@ psql -U your_user -d detroitchow -f ../../data/imports/locations_import.sql
 ```sql
 SELECT COUNT(*) FROM detroitchow.locations;
 -- Should return 538
+```
+
+### Spring Boot Admin API
+
+**Build the project:**
+```bash
+cd detroitchow-admin
+mvn clean package
+```
+
+**Run with H2 in-memory database (development):**
+```bash
+cd detroitchow-admin
+mvn spring-boot:run -Dspring-boot.run.arguments="--spring.profiles.active=test"
+```
+
+**Run with PostgreSQL (production):**
+```bash
+export DB_HOST=localhost DB_PORT=5432 DB_NAME=detroitchow
+export DB_USER=detroitchow_owner DB_PASSWORD=your_password
+cd detroitchow-admin
+mvn spring-boot:run -Dspring-boot.run.arguments="--spring.profiles.active=prod"
+```
+
+**Access API:**
+- Base URL: `http://localhost:8080/api/v1`
+- Swagger UI: `http://localhost:8080/api/v1/swagger-ui.html`
+- H2 Console (test profile): `http://localhost:8080/api/v1/h2-console`
+
+**Run tests:**
+```bash
+cd detroitchow-admin
+mvn test
+```
+
+**Generate OpenAPI code:**
+```bash
+cd detroitchow-admin
+mvn openapi-generator:generate
 ```
 
 ## Architecture Notes
@@ -242,7 +320,10 @@ When working with this codebase:
 3. **Don't manually set audit columns** - They're auto-populated by triggers
 4. **Use schema prefix** - Always qualify table names with `detroitchow.`
 5. **Consult Notion** - The Notion knowledge base has additional architectural decisions
-6. **Ask before major changes** - Tech stack decisions are still being finalized
+6. **OpenAPI-first design** - Modify `detroitchow-admin-api.yaml` first, then generate code with `mvn openapi-generator:generate`
+7. **Spring Boot profiles** - Use `test` profile for H2 development, `prod` for PostgreSQL
+8. **Liquibase for migrations** - Never manually alter database schema; create Liquibase changesets
+9. **Comprehensive testing** - Write JUnit tests for services, Cucumber scenarios for BDD integration tests
 
 ## Contact / Maintainer
 
