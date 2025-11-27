@@ -145,6 +145,19 @@ Reference table for social media and review site metadata.
 
 **Pre-populated sites:** Facebook, Instagram, Twitter, Yelp, TripAdvisor, OpenTable
 
+## Schema Management with Liquibase
+
+**Important:** Database schema changes are managed using Liquibase, maintained separately from application code in `/database/liquibase/`.
+
+### Why Liquibase is Separate
+
+- **Deployment Independence**: Database migrations can run separately from application deployments
+- **Multi-Application Support**: Multiple applications can share the same database without duplicating migration logic
+- **Controlled Execution**: Schema changes can be applied during maintenance windows independent of code releases
+- **Clear Separation**: Schema management is distinct from application business logic
+
+See `/database/liquibase/README.md` for comprehensive Liquibase documentation.
+
 ## Setup Instructions
 
 ### 1. Create Database
@@ -157,19 +170,35 @@ createdb detroitchow
 psql -U postgres -c "CREATE DATABASE detroitchow;"
 ```
 
-### 2. Load Schema
+### 2. Configure Liquibase Credentials
 
 ```bash
-psql -U your_user -d detroitchow -f database/schema/schema.sql
+cd database/liquibase
+cp liquibase.properties liquibase.local.properties
+# Edit liquibase.local.properties with your database credentials
 ```
 
-This creates:
+### 3. Run Database Migrations
+
+```bash
+cd database/liquibase
+./scripts/migrate.sh
+```
+
+This applies all Liquibase changesets, which create:
 - The `detroitchow` schema
 - All tables with constraints
 - Triggers for audit columns
 - Indexes for performance
 
-### 3. Import Legacy Data
+### 4. Verify Migration Status
+
+```bash
+cd database/liquibase
+./scripts/status.sh
+```
+
+### 5. Import Legacy Data (if needed)
 
 ```bash
 psql -U your_user -d detroitchow -f data/imports/detroitchow_legacy_imports.sql
@@ -268,12 +297,34 @@ ORDER BY location_count DESC;
 
 ## Database Maintenance
 
-### Reset Schema (Destructive)
+### Schema Changes
 
-**WARNING:** This drops all data.
+**All schema changes must be done through Liquibase changesets.**
+
+1. Create a new changeset file in `/database/liquibase/changelog/changesets/`
+2. Include it in `/database/liquibase/changelog/db.changelog-master.yaml`
+3. Run migrations: `cd database/liquibase && ./scripts/migrate.sh`
+
+See `/database/liquibase/README.md` for detailed instructions on creating changesets.
+
+### Rollback Migrations
 
 ```bash
-psql -U your_user -d detroitchow -f database/schema/schema.sql
+cd database/liquibase
+./scripts/rollback.sh 1  # Rollback last changeset
+```
+
+Or using Maven directly:
+```bash
+cd database/liquibase
+mvn liquibase:rollback -Plocal -Dliquibase.rollbackCount=1
+```
+
+### Check Migration Status
+
+```bash
+cd database/liquibase
+./scripts/status.sh
 ```
 
 ### Backup Database

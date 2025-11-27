@@ -129,6 +129,54 @@ This document records key technical and architectural decisions made during Detr
 
 ---
 
+## Database Management
+
+### Decision: Liquibase Managed Separately from Application
+**Date**: 2025-11-27
+**Status**: Implemented
+
+**Context**: Database schema migrations need to be managed independently from application deployments to support multiple applications, controlled deployment timing, and infrastructure flexibility.
+
+**Decision**: Liquibase configuration and changesets are maintained in `/database/liquibase/` as a standalone Maven project, separate from the Spring Boot application.
+
+**Rationale**:
+- **Deployment Independence**: Database migrations can be executed separately from application deployments
+- **Multi-Application Support**: Future applications (public API, mobile backend, admin tools) can share the same database without duplicating migration logic
+- **Controlled Execution**: Database changes can be applied during maintenance windows independent of code releases
+- **Clear Separation of Concerns**: Schema management is distinct from application business logic
+- **CI/CD Flexibility**: Migrations can be run as separate pipeline steps before or after application deployment
+- **Rollback Safety**: Database rollbacks can be performed without requiring application redeployment
+- **Team Collaboration**: DBAs or DevOps can manage schema changes without modifying application code
+
+**Implementation**:
+- Liquibase Maven project in `/database/liquibase/`
+- Helper scripts: `migrate.sh`, `status.sh`, `rollback.sh`
+- Separate profiles for local development and production environments
+- Credentials stored in `liquibase.local.properties` (gitignored)
+- Spring Boot applications use `hibernate.ddl-auto: none` to prevent schema modification
+- Comprehensive documentation in `/database/liquibase/README.md`
+
+**Trade-offs**:
+- **Pro**: Independent versioning and deployment of schema vs application
+- **Pro**: Simpler application configuration (no Liquibase dependency)
+- **Pro**: Easier to audit and review schema changes separately
+- **Con**: Requires manual migration step before running applications locally
+- **Con**: Developers must remember to run migrations when switching branches with schema changes
+- **Con**: Additional project to maintain
+
+**Alternatives Considered**:
+- **Embedded Liquibase in Spring Boot** - Rejected because it couples schema changes to application deployment and doesn't scale to multiple applications
+- **Flyway** - Liquibase chosen for more advanced features (rollback support, multiple database format support, preconditions)
+- **Manual SQL scripts** - Rejected due to lack of version tracking, rollback support, and migration state management
+
+**Migration from Previous Approach**:
+- Removed Liquibase dependency from `detroitchow-admin/pom.xml`
+- Moved changesets from `detroitchow-admin/src/main/resources/db/changelog/` to `/database/liquibase/changelog/changesets/`
+- Removed Liquibase configuration from all Spring Boot `application*.yml` files
+- Changed Hibernate DDL mode from `validate` to `none` in production profile
+
+---
+
 ## Technology Stack (In Progress)
 
 ### Decision: Backend Framework - TBD

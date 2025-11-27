@@ -20,6 +20,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Social media data aggregation features
 - Automated data validation and quality checks
 
+## [0.1.1] - 2025-11-27
+### Added
+- **DetroitChow Admin Service**: Added backend service to support updating DetroitChow Data 
+- **Liquibase**: Added Liquibase for DB changelog support
+- **Python scripts**: Scripts to query open street maps and google places API
+
 ## [0.1.0] - 2025-11-10
 
 ### Added

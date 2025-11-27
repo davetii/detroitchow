@@ -4,13 +4,12 @@
 - [x] PostgreSQL
 - [x] Populate Core Data
 - [x] Data Cleansing, verify address, verify postal code, verify status
-- [ ] Hours Calculator
 - [ ] pop tags
-
 
 ## Core Platform
 - [x] PostgreSQL + PostGIS setup
-- [ ] Admin Service (in progress)
+- [x] Admin Service (in progress)
+- [ ] Hours Calculator
 - [ ] Consumer Service
 
 ## Admin Tool
@@ -33,4 +32,4 @@
 - [x] PostgreSQL
 
 ## Other
-- [x] Azure Migration
+- [ ] Azure Migration

@@ -19,7 +19,7 @@ DetroitChow is a comprehensive restaurant discovery platform for Metro Detroit t
 ### Database
 - **Engine:** PostgreSQL
 - **Schema:** `detroitchow`
-- **Location:** `database/schema/schema.sql`
+- **Schema Management:** Liquibase (standalone in `/database/liquibase/`)
 
 ### Backend Admin API (detroitchow-admin)
 - **Framework:** Spring Boot 3.4.10
