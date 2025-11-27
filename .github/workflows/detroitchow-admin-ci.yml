@@ -1,0 +1,53 @@
+name: DetroitChow Admin CI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'detroitchow-admin/**'
+      - '.github/workflows/detroitchow-admin-ci.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'detroitchow-admin/**'
+      - '.github/workflows/detroitchow-admin-ci.yml'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: detroitchow-admin
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Compile
+        run: mvn clean compile
+
+      - name: Run tests
+        run: mvn test
+
+      - name: Verify code coverage (80% minimum)
+        run: mvn verify
+
+      - name: Display coverage summary
+        if: always()
+        run: |
+          echo "Code Coverage Report:"
+          if [ -f target/site/jacoco/index.html ]; then
+            grep -A 3 "Total" target/site/jacoco/index.html | grep -oP '\d+%' || echo "Coverage report generated, check artifacts for details"
+          else
+            echo "Coverage report not found"
+          fi
