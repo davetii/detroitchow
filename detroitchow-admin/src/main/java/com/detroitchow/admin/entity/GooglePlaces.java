@@ -57,15 +57,15 @@ public class GooglePlaces implements Serializable {
     private String businessStatus;
 
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "txtsearch_json")
+    @Column(name = "txtsearch_json", columnDefinition = "jsonb")
     private JsonNode txtsearchJson;
 
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "detail_json")
+    @Column(name = "detail_json", columnDefinition = "jsonb")
     private JsonNode detailJson;
 
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "store_json")
+    @Column(name = "store_json", columnDefinition = "jsonb")
     private JsonNode storeJson;
 
     @Column(name = "premise_place_id", length = 500)

@@ -25,9 +25,9 @@ DetroitChow is a restaurant discovery platform for Metro Detroit that aggregates
 ## Technology Stack
 
 - **Database:** PostgreSQL (schema: `detroitchow`)
+  - **Schema Management:** Liquibase (managed separately in `/database/liquibase/`)
 - **Backend Admin API:** Spring Boot 3.4.10 (Java 21) with RESTful API
   - OpenAPI 3.0 specification-driven design
-  - Liquibase for database migrations
   - JPA/Hibernate for ORM
   - Testing: JUnit 5, Mockito, Cucumber BDD
   - Development: H2 in-memory database
@@ -76,17 +76,26 @@ These conventions are non-negotiable and must be followed:
 
 ### Working with the Database
 
-**Reset database schema:**
+**Database migrations are managed by Liquibase in `/database/liquibase/`**
+
+**Run database migrations:**
 ```bash
-psql -U your_user -d detroitchow -f database/schema/schema.sql
+cd database/liquibase
+./scripts/migrate.sh
 ```
 
-**Import legacy data:**
+**Check migration status:**
 ```bash
-psql -U your_user -d detroitchow -f data/imports/detroitchow_legacy_imports.sql
+cd database/liquibase
+./scripts/status.sh
 ```
 
-**Verify import:**
+**See full documentation:**
+```bash
+cat database/liquibase/README.md
+```
+
+**Verify data:**
 ```sql
 SELECT COUNT(*) FROM detroitchow.locations;  -- Should return 538
 ```
@@ -214,14 +223,11 @@ mvn test -Dtest=LocationServiceTest
 
 ### Database Migrations
 
-Managed by Liquibase. Migrations run automatically on startup.
+**Database schema is managed separately in `/database/liquibase/`**
 
-**Location:** `detroitchow-admin/src/main/resources/db/changelog/`
+The admin application does NOT manage migrations. All schema changes must be applied via Liquibase before deploying the application.
 
-**Manual migration:**
-```bash
-mvn liquibase:update
-```
+See the [Database Management](#working-with-the-database) section for migration instructions.
 
 ## Python Development
 
@@ -263,8 +269,13 @@ python osm_restaurant_importer.py
 ```
 detroitchow/
 ├── database/
-│   ├── schema.sql              # Current production schema
-│   └── google-places.sql       # Google Places import SQL
+│   ├── liquibase/              # Database migration management
+│   │   ├── changelog/          # Liquibase changesets
+│   │   ├── scripts/            # Helper scripts (migrate.sh, status.sh, rollback.sh)
+│   │   ├── pom.xml             # Maven configuration for Liquibase
+│   │   ├── liquibase.properties # Template configuration
+│   │   └── README.md           # Full migration documentation
+│   └── legacy/                 # Legacy SQL files (reference only)
 ├── data/
 │   ├── legacy/                 # Original 15-year-old dataset (2 JSON files)
 │   ├── imports/                # Generated SQL import files
@@ -281,15 +292,14 @@ detroitchow/
 │   │   │   │   └── mapper/           # Entity-DTO mappers
 │   │   │   └── resources/
 │   │   │       ├── application*.yml  # Spring Boot configuration
-│   │   │       ├── api/              # OpenAPI specification
-│   │   │       └── db/changelog/     # Liquibase migrations
+│   │   │       └── api/              # OpenAPI specification
 │   │   └── test/                     # Unit & integration tests
 │   ├── pom.xml                       # Maven build configuration
 │   └── README.md                     # Admin API documentation
 ├── scripts/
 │   └── data-collect/           # OSM data collection scripts + city-level results
 ├── venv/                       # Python virtual environment
-└── PROJECT_CONTEXT.md          # Detailed project documentation
+└── CLAUDE.md                   # Project documentation and AI assistant guidance
 ```
 
 ## Resources
@@ -304,12 +314,16 @@ detroitchow/
 - Initial data migration from legacy JSON (538 locations)
 - OpenStreetMap data collection scripts
 - Extensive OSM data collection (Metro Detroit counties and cities)
+- **Database Migration System:**
+  - Liquibase configuration in `/database/liquibase/`
+  - Maven-based migration management
+  - Helper scripts for common operations
+  - Separate from application deployment
 - **Backend Admin API (detroitchow-admin):**
   - Spring Boot 3.4.10 application with Java 21
   - OpenAPI 3.0 specification and code generation
   - Location and Menu management endpoints
   - JPA entities, repositories, services, and controllers
-  - Liquibase database migrations
   - Comprehensive testing suite (JUnit, Mockito, Cucumber)
   - Swagger UI for API documentation
   - Multi-profile support (test/H2, prod/PostgreSQL)

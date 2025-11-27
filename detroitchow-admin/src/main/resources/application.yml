@@ -13,10 +13,6 @@ spring:
           batch_size: 20
         order_inserts: true
         order_updates: true
-  liquibase:
-    change-log: classpath:db/changelog/db.changelog-master.yaml
-    enabled: true
-    drop-first: false
   jackson:
     serialization:
       write-dates-as-timestamps: false
