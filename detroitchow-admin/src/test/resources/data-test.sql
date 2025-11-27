@@ -1,6 +1,11 @@
 -- Test data for DetroitChow Admin API
 -- This file is loaded only when the 'test' profile is active
 
+-- Delete existing test data to allow re-running
+DELETE FROM detroitchow.google_places WHERE locationid LIKE 'loc-%';
+DELETE FROM detroitchow.menus WHERE locationid LIKE 'loc-%';
+DELETE FROM detroitchow.locations WHERE locationid LIKE 'loc-%';
+
 -- Insert test locations
 INSERT INTO detroitchow.locations (locationid, name, description, status, address1, city, locality, zip, region, country, phone1, lat, lng, website, facebook, instagram, hours, create_date, create_user, updated_date, update_user)
 VALUES

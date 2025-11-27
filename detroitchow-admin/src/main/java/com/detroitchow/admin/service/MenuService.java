@@ -38,15 +38,18 @@ public class MenuService {
      * Create a new menu for a location
      */
     public Menu createMenu(String locationId, Menu menu) {
-        Optional<Location> location = locationRepository.findById(locationId);
-        if (location.isEmpty()) {
+        Optional<Location> locationOpt = locationRepository.findById(locationId);
+        if (locationOpt.isEmpty()) {
             throw new MenuNotFoundException("Location not found: " + locationId);
         }
 
-        menu.setLocationid(locationId);
+        Location location = locationOpt.get();
+
+        // Set the location relationship (this will populate locationid via the FK)
+        menu.setLocation(location);
         menu.setCreateDate(OffsetDateTime.now());
         menu.setUpdatedDate(OffsetDateTime.now());
-        
+
         if (menu.getPriority() == null) {
             // Find the highest priority and add 1
             List<Menu> existingMenus = menuRepository.findByLocationidOrderByPriority(locationId);

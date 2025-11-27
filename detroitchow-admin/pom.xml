@@ -261,6 +261,7 @@
                         <include>**/*IT.java</include>
                         <include>**/*RunCucumberTests.java</include>
                     </includes>
+                    <argLine>@{argLine} -XX:+EnableDynamicAgentLoading</argLine>
                 </configuration>
             </plugin>
             <plugin>
@@ -279,6 +280,15 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
+                        <configuration>
+                            <excludes>
+                                <!-- Exclude OpenAPI generated code -->
+                                <exclude>**/com/detroitchow/admin/model/**</exclude>
+                                <exclude>**/com/detroitchow/admin/api/**</exclude>
+                                <!-- Exclude Lombok generated code in entities -->
+                                <exclude>**/com/detroitchow/admin/entity/*$*</exclude>
+                            </excludes>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
