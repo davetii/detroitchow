@@ -538,6 +538,7 @@ components:
         - city
         - region
         - zip
+        - operatingStatus
       properties:
         locationid:
           type: string
@@ -551,10 +552,8 @@ components:
           type: string
           description: Description of the restaurant
           nullable: true
-        status:
+        operatingStatus:
           type: string
-          enum: [active, temporarily_closed, permanently_closed]
-          default: active
           description: Current status of the location
         address1:
           type: string
@@ -595,13 +594,11 @@ components:
           description: Secondary phone number
           nullable: true
         lat:
-          type: number
-          format: double
+          type: string
           description: Latitude coordinate
           example: 42.3314
         lng:
-          type: number
-          format: double
+          type: string
           description: Longitude coordinate
           example: -83.0458
         website:
@@ -647,11 +644,6 @@ components:
           type: string
           description: Contact information text
           nullable: true
-        menus:
-          type: array
-          description: Array of menus associated with this location, ordered by priority
-          items:
-            $ref: '#/components/schemas/Menu'
 
     LocationInput:
       type: object
@@ -662,6 +654,7 @@ components:
         - city
         - region
         - zip
+        - operatingStatus
       properties:
         name:
           type: string
@@ -670,10 +663,8 @@ components:
           type: string
           description: Description of the restaurant
           nullable: true
-        status:
+        operatingStatus:
           type: string
-          enum: [active, temporarily_closed, permanently_closed]
-          default: active
         address1:
           type: string
           description: Primary address line
@@ -707,12 +698,10 @@ components:
           description: Secondary phone number
           nullable: true
         lat:
-          type: number
-          format: double
+          type: string
           description: Latitude coordinate
         lng:
-          type: number
-          format: double
+          type: string
           description: Longitude coordinate
         website:
           type: string
@@ -757,12 +746,6 @@ components:
           type: string
           description: Contact information text
           nullable: true
-        menus:
-          type: array
-          description: Array of menus associated with this location
-          items:
-            $ref: '#/components/schemas/MenuInput'
-
     Menu:
       type: object
       description: Menu associated with a Detroit Chow location
@@ -825,12 +808,10 @@ components:
           type: string
           description: Business name from Google Places
         lat:
-          type: number
-          format: double
+          type: string
           description: Latitude from Google Places
         lng:
-          type: number
-          format: double
+          type: string
           description: Longitude from Google Places
         phone1:
           type: string
@@ -891,12 +872,10 @@ components:
           type: string
           description: Business name from Google Places
         lat:
-          type: number
-          format: double
+          type: string
           description: Latitude from Google Places
         lng:
-          type: number
-          format: double
+          type: string
           description: Longitude from Google Places
         phone1:
           type: string

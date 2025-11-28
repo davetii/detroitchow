@@ -48,10 +48,6 @@ public class LocationMapper {
                 .yelp(location.getYelp())
                 .hours(location.getHours())
                 .contactText(location.getContactText())
-                .menus(location.getMenus() != null ?
-                        location.getMenus().stream()
-                                .map(menuMapper::toDto)
-                                .collect(Collectors.toList()) : null)
                 .createDate(location.getCreateDate())
                 .createUser(location.getCreateUser())
                 .updatedDate(location.getUpdatedDate())

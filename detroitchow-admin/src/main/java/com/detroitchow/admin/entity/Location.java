@@ -117,10 +117,6 @@ public class Location implements Serializable {
     @Column(name = "update_user", length = 100)
     private String updateUser;
 
-    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @Builder.Default
-    private List<Menu> menus = new ArrayList<>();
-
     @PrePersist
     protected void onCreate() {
         if (createDate == null) {

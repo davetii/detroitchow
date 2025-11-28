@@ -164,56 +164,6 @@ class LocationMapperTest {
     }
 
     @Test
-    void testToDto_WithMenus_ShouldMapMenus() {
-        // Given
-        Menu menu1 = Menu.builder()
-                .menuLink("https://menu1.pdf")
-                .descr("Dinner Menu")
-                .priority(1)
-                .build();
-        Menu menu2 = Menu.builder()
-                .menuLink("https://menu2.pdf")
-                .descr("Lunch Menu")
-                .priority(2)
-                .build();
-
-        Location location = Location.builder()
-                .locationid("loc-with-menus")
-                .name("Restaurant With Menus")
-                .menus(Arrays.asList(menu1, menu2))
-                .build();
-
-        // When
-        LocationDto dto = locationMapper.toDto(location);
-
-        // Then
-        assertNotNull(dto);
-        assertNotNull(dto.getMenus());
-        assertEquals(2, dto.getMenus().size());
-        assertEquals("https://menu1.pdf", dto.getMenus().get(0).getMenuLink());
-        assertEquals("Dinner Menu", dto.getMenus().get(0).getDescr());
-        assertEquals("https://menu2.pdf", dto.getMenus().get(1).getMenuLink());
-        assertEquals("Lunch Menu", dto.getMenus().get(1).getDescr());
-    }
-
-    @Test
-    void testToDto_WithNullMenus_ShouldMapAsNull() {
-        // Given
-        Location location = Location.builder()
-                .locationid("loc-no-menus")
-                .name("Restaurant Without Menus")
-                .menus(null)
-                .build();
-
-        // When
-        LocationDto dto = locationMapper.toDto(location);
-
-        // Then
-        assertNotNull(dto);
-        assertNull(dto.getMenus());
-    }
-
-    @Test
     void testToDto_WithAllLocationStatuses_ShouldMapCorrectly() {
         // Test active status
         Location activeLocation = Location.builder()
@@ -356,7 +306,6 @@ class LocationMapperTest {
                 .website("https://complex.com")
                 .createDate(now)
                 .createUser("system")
-                .menus(Arrays.asList(menu))
                 .build();
 
         // When
@@ -371,8 +320,5 @@ class LocationMapperTest {
         assertEquals("42.3000", dto.getLat());
         assertEquals("-83.0500", dto.getLng());
 
-        assertNotNull(dto.getMenus());
-        assertEquals(1, dto.getMenus().size());
-        assertEquals("https://dinner-menu.pdf", dto.getMenus().get(0).getMenuLink());
     }
 }

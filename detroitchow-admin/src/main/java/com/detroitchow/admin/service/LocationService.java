@@ -2,7 +2,6 @@ package com.detroitchow.admin.service;
 
 import com.detroitchow.admin.entity.Location;
 import com.detroitchow.admin.repository.LocationRepository;
-import com.detroitchow.admin.repository.MenuRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;

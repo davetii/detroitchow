@@ -42,7 +42,6 @@ public class LocationDto {
     private String yelp;
     private String hours;
     private String contactText;
-    private List<MenuDto> menus;
     private OffsetDateTime createDate;
     private String createUser;
     private OffsetDateTime updatedDate;
