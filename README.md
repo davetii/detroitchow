@@ -16,7 +16,7 @@ DetroitChow helps users discover restaurants and food markets across Metro Detro
   - Liquibase for database migrations
   - JPA/Hibernate for ORM
   - Comprehensive testing (JUnit 5, Mockito, Cucumber)
-- **Frontend (Pending):** TBD (React, Vue, or similar)
+- **Frontend:** React with Fetch API
 - **Data Collection:** Python scripts for data aggregation
 - **Target Platforms:** Web (responsive), Android, iOS
 
@@ -27,6 +27,9 @@ DetroitChow helps users discover restaurants and food markets across Metro Detro
 - Maven 3.8+ (for building Java projects)
 - Python 3.8+ with `pip` (for data collection scripts)
 - Git
+- Node 24
+- React ^19.2
+- Vite
 
 ## Quick Start
 

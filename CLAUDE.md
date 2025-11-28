@@ -32,7 +32,13 @@ DetroitChow is a restaurant discovery platform for Metro Detroit that aggregates
   - Testing: JUnit 5, Mockito, Cucumber BDD
   - Development: H2 in-memory database
   - Production: PostgreSQL with HikariCP connection pooling
-- **Frontend Admin Tool:** TBD (React, Vue, or similar)
+- **Frontend Admin UI:** React 19 with TypeScript + Vite
+  - State Management: Zustand, TanStack Query (React Query)
+  - UI Components: TanStack Table, React Hook Form
+  - Styling: Tailwind CSS v4
+  - Testing: Vitest, Testing Library, Happy-DOM
+  - Code Quality: ESLint, TypeScript strict mode
+  - Build Tool: Vite 7
 - **Frontend (Pending):** TBD (React, Vue, or similar)
 - **Data Scripts:** Python for data collection and migration
 - **Python Dependencies:** requests library (for OpenStreetMap API queries)
@@ -139,7 +145,6 @@ Both scripts:
 ## Data Sources
 
 ### Current Data
-
 1. **Legacy Data** (IMPORTED)
    - Source: Original DetroitChow.com from 15 years ago
    - File: `data/legacy/GetStores-response-indented.json` and `get.json`
@@ -150,10 +155,9 @@ Both scripts:
    - County-level queries in `data/osm-raw/`
    - City-level queries in `scripts/data-collect/`
    - Extensive Metro Detroit coverage collected
+3. Google Places API
 
 ### Future Data Sources
-
-- Google Places API
 - Yelp API
 - Social media APIs (Facebook, Instagram, Twitter)
 - Manual submissions
@@ -229,6 +233,130 @@ The admin application does NOT manage migrations. All schema changes must be app
 
 See the [Database Management](#working-with-the-database) section for migration instructions.
 
+## React Admin UI Development
+
+Located in `detroitchow-admin-ui/`
+
+### Building and Running
+
+**Install dependencies:**
+```bash
+cd detroitchow-admin-ui
+npm install
+```
+
+**Run development server:**
+```bash
+npm run dev
+```
+
+Application runs at: `http://localhost:5173`
+
+**Build for production:**
+```bash
+npm run build
+```
+
+**Preview production build:**
+```bash
+npm run preview
+```
+
+### Testing
+
+**Run tests (watch mode):**
+```bash
+npm run test
+```
+
+**Run tests with coverage:**
+```bash
+npm run test -- --coverage --run
+```
+
+**Run tests with UI:**
+```bash
+npm run test:ui
+```
+
+**Coverage Requirements:**
+- Minimum 80% coverage enforced in `vitest.config.ts`
+- Coverage thresholds apply to: lines, functions, branches, statements
+- Tests will fail if coverage drops below 80%
+
+### Code Quality
+
+**Run ESLint:**
+```bash
+npm run lint
+```
+
+**ESLint Configuration:**
+- Configured in `eslint.config.js`
+- Production code only (test files excluded via `globalIgnores`)
+- Enforces React Hooks rules and React Refresh patterns
+
+### Type Generation
+
+The admin UI uses TypeScript types generated from the OpenAPI specification:
+
+```bash
+npm run generate-types
+```
+
+Generated file: `src/types/api.ts`
+
+**Important:** Run this command whenever the backend API specification changes.
+
+### Project Structure
+
+```
+detroitchow-admin-ui/
+├── src/
+│   ├── api/              # API client functions
+│   ├── components/       # Reusable UI components
+│   │   └── layout/       # Layout components
+│   ├── features/         # Feature-specific components
+│   │   └── locations/    # Location management features
+│   ├── hooks/            # Custom React hooks
+│   ├── lib/              # Utility libraries and configurations
+│   │   └── queryClient.ts # TanStack Query configuration
+│   ├── pages/            # Route-level page components
+│   ├── test/             # Test setup and utilities
+│   └── types/            # TypeScript type definitions
+│       └── api.ts        # Generated API types (from OpenAPI)
+├── eslint.config.js      # ESLint configuration
+├── vitest.config.ts      # Vitest test configuration
+├── vite.config.ts        # Vite build configuration
+└── tsconfig.json         # TypeScript configuration
+```
+
+### Key Features Implemented
+
+- **Location Management:**
+  - View all locations in sortable, filterable table
+  - Create new locations
+  - Edit existing locations
+  - Delete locations
+  - View location details
+
+- **Data Fetching:**
+  - TanStack Query for server state management
+  - 5-minute stale time for cached data
+  - Automatic background refetching disabled
+  - Single retry on failure
+
+- **Routing:**
+  - React Router v7 for client-side routing
+  - Layout component with navigation
+  - Routes: `/`, `/locations`, `/location/:locationId`
+
+### CI/CD
+
+Automated testing and deployment via GitHub Actions.
+
+See the [GitHub Actions](#github-actions) section for details.
+
 ## Python Development
 
 **Activate virtual environment:**
@@ -248,6 +376,87 @@ cd scripts/data-collect
 python osm_restaurant_importer.py
 ```
 
+## GitHub Actions
+
+The project uses GitHub Actions for continuous integration and deployment.
+
+### Workflows
+
+#### 1. DetroitChow Admin CI (Java Backend)
+
+**File:** `.github/workflows/detroitchow-admin-ci.yml`
+
+**Triggers:**
+- Push to `main` branch (when `detroitchow-admin/**` files change)
+- Pull requests to `main` branch (when `detroitchow-admin/**` files change)
+
+**Pipeline Steps:**
+1. Checkout code
+2. Set up JDK 21 (Temurin distribution)
+3. Compile Java code
+4. Run tests
+5. Verify code coverage (80% minimum)
+6. Display coverage summary
+
+**Requirements:**
+- All tests must pass
+- Code coverage must be ≥80% (enforced via JaCoCo)
+
+#### 2. DetroitChow Admin UI CI (React Frontend)
+
+**File:** `.github/workflows/detroitchow-admin-ui-ci.yml`
+
+**Triggers:**
+- Push to `main` branch (when `detroitchow-admin-ui/**` files change)
+- Pull requests to `main` branch (when `detroitchow-admin-ui/**` files change)
+
+**Pipeline Steps:**
+1. Checkout code
+2. Set up Node.js 20 with npm caching
+3. Install dependencies (`npm ci`)
+4. Run ESLint (production code only)
+5. Run tests with coverage
+6. Display coverage summary
+7. Build production bundle
+8. Upload coverage reports as artifacts (30-day retention)
+
+**Requirements:**
+- ESLint must pass with no errors
+- All tests must pass
+- Code coverage must be ≥80% (enforced via Vitest config)
+- Production build must succeed
+
+### Coverage Enforcement
+
+**Backend (Java):**
+- Configured in `detroitchow-admin/pom.xml` via JaCoCo plugin
+- Thresholds: 80% for lines, branches, instructions
+
+**Frontend (React):**
+- Configured in `detroitchow-admin-ui/vitest.config.ts`
+- Thresholds: 80% for lines, functions, branches, statements
+
+### Local Testing
+
+Before pushing to main, verify CI will pass by running locally:
+
+**Java Backend:**
+```bash
+cd detroitchow-admin
+mvn clean compile
+mvn test
+mvn verify
+```
+
+**React Frontend:**
+```bash
+cd detroitchow-admin-ui
+npm ci
+npm run lint
+npm run test -- --coverage --run
+npm run build
+```
+
 ## Architecture Principles
 
 1. **API-First Design** - Backend exposes REST API, all clients consume it
@@ -256,6 +465,30 @@ python osm_restaurant_importer.py
 4. **Parameterized Queries Only** - NEVER string concatenation for SQL
 5. **URL Validation Required** - Social media links must be validated
 6. **Multi-Source Support** - locationid and coordinate fields support various formats
+7. **Test Coverage Minimum** - 80% code coverage required for both frontend and backend
+8. **ESLint for Production Code Only** - Test files excluded from linting
+
+## Important Git Conventions
+
+### .gitignore Configuration
+
+The root `.gitignore` file contains patterns for Python, Node.js, Java, and general development files.
+
+**IMPORTANT:** The `lib/` ignore pattern has been carefully configured to:
+- Ignore Python library directories (`/lib/`, `venv/lib/`, etc.)
+- **NOT ignore** Node.js source code directories like `detroitchow-admin-ui/src/lib/`
+
+**Pattern used:**
+```gitignore
+# Python lib directories (but not Node.js src/lib directories)
+/lib/
+venv/lib/
+env/lib/
+ENV/lib/
+.venv/lib/
+```
+
+This ensures React/Node.js library code in `src/lib/` is properly tracked by git while Python virtual environment libraries remain ignored.
 
 ## Known Technical Debt
 
@@ -296,6 +529,25 @@ detroitchow/
 │   │   └── test/                     # Unit & integration tests
 │   ├── pom.xml                       # Maven build configuration
 │   └── README.md                     # Admin API documentation
+├── detroitchow-admin-ui/       # React Admin Frontend
+│   ├── src/
+│   │   ├── api/                # API client functions
+│   │   ├── components/         # Reusable UI components
+│   │   ├── features/           # Feature-specific components
+│   │   ├── hooks/              # Custom React hooks
+│   │   ├── lib/                # Utility libraries (queryClient, etc.)
+│   │   ├── pages/              # Route-level page components
+│   │   ├── test/               # Test setup and utilities
+│   │   └── types/              # TypeScript type definitions
+│   ├── eslint.config.js        # ESLint configuration
+│   ├── vitest.config.ts        # Vitest test configuration
+│   ├── vite.config.ts          # Vite build configuration
+│   ├── package.json            # NPM dependencies and scripts
+│   └── tsconfig.json           # TypeScript configuration
+├── .github/
+│   └── workflows/              # GitHub Actions CI/CD
+│       ├── detroitchow-admin-ci.yml     # Java backend CI
+│       └── detroitchow-admin-ui-ci.yml  # React frontend CI
 ├── scripts/
 │   └── data-collect/           # OSM data collection scripts + city-level results
 ├── venv/                       # Python virtual environment
@@ -327,10 +579,26 @@ detroitchow/
   - Comprehensive testing suite (JUnit, Mockito, Cucumber)
   - Swagger UI for API documentation
   - Multi-profile support (test/H2, prod/PostgreSQL)
+  - GitHub Actions CI with 80% coverage enforcement
+- **Frontend Admin UI (detroitchow-admin-ui):**
+  - React 19 with TypeScript and Vite 7
+  - TanStack Query (React Query) for data fetching
+  - TanStack Table for location management
+  - React Hook Form for form handling
+  - Tailwind CSS v4 for styling
+  - Vitest + Testing Library for testing
+  - ESLint for code quality (production code only)
+  - OpenAPI-generated TypeScript types
+  - GitHub Actions CI with 80% coverage enforcement
+- **CI/CD Pipeline:**
+  - Separate workflows for backend and frontend
+  - Automated testing on push to main and PRs
+  - 80% code coverage enforcement
+  - ESLint validation for frontend
+  - Production build verification
+  - Coverage report artifacts
 
 🚧 **In Progress:**
-- Google Places API integration
-- Frontend Admin Tool development
 
 📋 **Planned:**
 - Public-facing frontend implementation
@@ -338,3 +606,4 @@ detroitchow/
 - Social media aggregation features
 - Authentication and authorization
 - Rate limiting and caching
+- Deployment automation

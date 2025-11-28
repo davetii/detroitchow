@@ -13,7 +13,7 @@
 - [ ] Consumer Service
 
 ## Admin Tool
-- [ ] Search For Locations
+- [x] Search For Locations
 - [ ] Create locations
 - [ ] Update Locations
 - [ ] Delete Loations
