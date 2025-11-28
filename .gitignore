@@ -24,7 +24,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -33,6 +32,13 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+
+# Python lib directories (but not Node.js src/lib directories)
+/lib/
+venv/lib/
+env/lib/
+ENV/lib/
+.venv/lib/
 
 # Jupyter Notebook
 .ipynb_checkpoints
