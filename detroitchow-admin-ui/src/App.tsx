@@ -4,6 +4,7 @@ import { queryClient } from './lib/queryClient';
 import { Layout } from './components/layout/Layout';
 import { Home } from './pages/Home';
 import { Locations } from './pages/Locations';
+import { Location } from './pages/Location';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="locations" element={<Locations />} />
+            <Route path="location/:locationId" element={<Location />} />
           </Route>
         </Routes>
       </BrowserRouter>

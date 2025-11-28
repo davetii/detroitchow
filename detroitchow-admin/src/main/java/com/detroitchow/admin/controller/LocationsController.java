@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("")
 @RequiredArgsConstructor
 @Slf4j
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -32,6 +32,7 @@ public class LocationsController {
     @GetMapping("/locations")
     public ResponseEntity<List<LocationDto>> getAllLocations() {
         List<Location> locations = locationService.getAllLocations();
+        log.info("getAllLocations size: " + locations.size());
         List<LocationDto> locationDtos = locations.stream()
                 .map(locationMapper::toDto)
                 .collect(Collectors.toList());
