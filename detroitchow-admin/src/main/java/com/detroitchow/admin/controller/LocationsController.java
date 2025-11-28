@@ -31,9 +31,8 @@ public class LocationsController {
      */
     @GetMapping("/locations")
     public ResponseEntity<List<LocationDto>> getAllLocations() {
-        List<Location> locations = locationService.getAllLocations();
-        log.info("getAllLocations size: " + locations.size());
-        List<LocationDto> locationDtos = locations.stream()
+        List<LocationDto> locationDtos = locationService.getAllLocations()
+                .stream()
                 .map(locationMapper::toDto)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(locationDtos);
@@ -45,7 +44,6 @@ public class LocationsController {
     @GetMapping("/location/{id}")
     public ResponseEntity<?> getLocationById(@PathVariable String id) {
         log.debug("Getting location by ID: {}", id);
-        
         return locationService.getLocationById(id)
                 .map(location -> {
                     LocationDto dto = locationMapper.toDto(location);
@@ -65,13 +63,10 @@ public class LocationsController {
         
         Location location = locationMapper.toEntity(locationDto);
         Location saved = locationService.createLocation(location);
-        
         LocationDto savedDto = locationMapper.toDto(saved);
-        
         Map<String, Object> response = new HashMap<>();
         response.put("data", savedDto);
         response.put("message", "Location created successfully");
-        
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -85,9 +80,7 @@ public class LocationsController {
         try {
             Location location = locationMapper.toEntity(locationDto);
             Location updated = locationService.updateLocation(location);
-            
             LocationDto updatedDto = locationMapper.toDto(updated);
-            
             Map<String, Object> response = new HashMap<>();
             response.put("data", updatedDto);
             response.put("message", "Location updated successfully");
@@ -104,7 +97,6 @@ public class LocationsController {
     @DeleteMapping("/location/{id}")
     public ResponseEntity<?> deleteLocation(@PathVariable String id) {
         log.debug("Deleting location: {}", id);
-        
         try {
             locationService.deleteLocation(id);
             return ResponseEntity.noContent().build();

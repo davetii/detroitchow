@@ -5,7 +5,10 @@ Active work items, blockers, and immediate next steps for DetroitChow developmen
 **Last Updated**: 2025-11-25
 
 ---
-- [ ] Implement Admin Tool front end
+- [ ] Admin Tool UI - Location Screen load
+- [ ] Admin Tool UI - Location Screen update location
+- [ ] Admin Tool UI - google data compare fields
+- [ ] Admin Tool UI - refresh google data
 ---
 
 ## Up Next (Prioritized)
