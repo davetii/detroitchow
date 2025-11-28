@@ -386,7 +386,7 @@ components:
           nullable: true
         status:
           type: string
-          enum: [active, inactive, pending]
+          enum: [active, temporarily_closed, permanently_closed]
           default: active
           description: Current status of the location
         address1:

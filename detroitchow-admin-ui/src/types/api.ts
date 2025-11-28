@@ -163,7 +163,7 @@ export interface components {
              * @default active
              * @enum {string}
              */
-            status: "active" | "inactive" | "pending";
+            status: "active" | "temporarily_closed" | "permanently_closed";
             /**
              * @description Primary address line
              * @example 123 Main Street
