@@ -17,6 +17,7 @@ public class GooglePlacesMapper {
 
         return GooglePlacesDto.builder()
                 .id(googlePlaces.getId())
+                .locationid(googlePlaces.getLocationid())
                 .placeId(googlePlaces.getPlaceId())
                 .lat(googlePlaces.getLat())
                 .lng(googlePlaces.getLng())
@@ -44,6 +45,7 @@ public class GooglePlacesMapper {
 
         return GooglePlaces.builder()
                 .id(dto.getId())
+                .locationid(dto.getLocationid())
                 .placeId(dto.getPlaceId())
                 .lat(dto.getLat())
                 .lng(dto.getLng())

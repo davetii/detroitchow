@@ -1,0 +1,202 @@
+### DetroitChow Admin API - Locations Endpoints
+### Environment: Use http-client.env.json to switch between dev/prod
+### Run in IntelliJ IDEA or VS Code (with REST Client extension)
+
+###############################################################################
+# GET ALL LOCATIONS
+###############################################################################
+
+### Get all active and temporarily closed locations
+GET {{baseUrl}}/locations
+Accept: application/json
+
+###############################################################################
+# GET LOCATION BY ID
+###############################################################################
+
+### Get location by ID (replace with actual locationid)
+GET {{baseUrl}}/location/loc_ded109b1
+Accept: application/json
+
+### Get location by ID - Not Found Example
+GET {{baseUrl}}/location/nonexistent
+Accept: application/json
+
+###############################################################################
+# CREATE LOCATION
+###############################################################################
+
+### Create a new location (minimal required fields)
+POST {{baseUrl}}/location
+Content-Type: application/json
+
+{
+  "name": "Test Restaurant",
+  "status": "active",
+  "address1": "123 Test St",
+  "city": "Detroit",
+  "region": "Michigan",
+  "zip": "48201",
+  "country": "US"
+}
+
+### Create a new location (full example with all fields)
+POST {{baseUrl}}/location
+Content-Type: application/json
+
+{
+  "name": "Full Example Restaurant",
+  "description": "A comprehensive example of a restaurant listing",
+  "status": "active",
+  "address1": "456 Example Ave",
+  "address2": "Suite 100",
+  "city": "Detroit",
+  "locality": "Downtown",
+  "region": "Michigan",
+  "zip": "48226",
+  "country": "US",
+  "phone1": "313-555-1234",
+  "phone2": "313-555-5678",
+  "lat": "42.3314",
+  "lng": "-83.0458",
+  "website": "https://example-restaurant.com",
+  "facebook": "https://facebook.com/examplerestaurant",
+  "twitter": "https://twitter.com/examplerest",
+  "instagram": "https://instagram.com/examplerestaurant",
+  "opentable": "https://opentable.com/example",
+  "tripadvisor": "https://tripadvisor.com/example",
+  "yelp": "https://yelp.com/biz/example",
+  "hours": "Mon-Fri: 11am-10pm, Sat-Sun: 12pm-11pm",
+  "contactText": "Call for reservations"
+}
+
+###############################################################################
+# UPDATE LOCATION
+###############################################################################
+
+### Update an existing location (replace locationid with actual value)
+PUT {{baseUrl}}/location
+Content-Type: application/json
+
+{
+  "locationid": "loc_ded109b1",
+  "name": "Full Example Restaurant unnamed",
+  "description": "A comprehensive example of a restaurant listing",
+  "status": "active",
+  "address1": "456 Example Ave",
+  "address2": "Suite 100",
+  "city": "Detroit",
+  "locality": "Downtown",
+  "region": "Michigan",
+  "zip": "48226",
+  "country": "US",
+  "phone1": "313-555-1234",
+  "phone2": "313-555-5678",
+  "lat": "42.3314",
+  "lng": "-83.0458",
+  "website": "https://example-restaurant.com",
+  "facebook": "https://facebook.com/examplerestaurant",
+  "twitter": "https://twitter.com/examplerest",
+  "instagram": "https://instagram.com/examplerestaurant",
+  "opentable": "https://opentable.com/example",
+  "tripadvisor": "https://tripadvisor.com/example",
+  "yelp": "https://yelp.com/biz/example",
+  "hours": "Mon-Fri: 11am-10pm, Sat-Sun: 12pm-11pm",
+  "contactText": "Call for reservations"
+}
+
+### Update location status to temporarily closed
+PUT {{baseUrl}}/location
+Content-Type: application/json
+
+{
+  "locationid": "loc_ded109b1",
+  "name": "Full Example Restaurant renamed",
+  "description": "A comprehensive example of a restaurant listing",
+  "status": "temporarily_closed",
+  "address1": "456 Example Ave",
+  "address2": "Suite 100",
+  "city": "Detroit",
+  "locality": "Downtown",
+  "region": "Michigan",
+  "zip": "48226",
+  "country": "US",
+  "phone1": "313-555-1234",
+  "phone2": "313-555-5678",
+  "lat": "42.3314",
+  "lng": "-83.0458",
+  "website": "https://example-restaurant.com",
+  "facebook": "https://facebook.com/examplerestaurant",
+  "twitter": "https://twitter.com/examplerest",
+  "instagram": "https://instagram.com/examplerestaurant",
+  "opentable": "https://opentable.com/example",
+  "tripadvisor": "https://tripadvisor.com/example",
+  "yelp": "https://yelp.com/biz/example",
+  "hours": "Mon-Fri: 11am-10pm, Sat-Sun: 12pm-11pm",
+  "contactText": "Call for reservations",
+  "operatingStatus": "active"
+}
+
+### Update location status to permanently closed
+PUT {{baseUrl}}/location
+Content-Type: application/json
+
+{
+  "locationid": "32",
+  "name": "Ocean Prime",
+  "status": "permanently_closed",
+  "address1": "123 Main St",
+  "city": "Detroit",
+  "region": "Michigan",
+  "zip": "48226",
+  "country": "US"
+}
+
+###############################################################################
+# DELETE LOCATION
+###############################################################################
+
+### Delete a location by ID (replace with actual locationid)
+DELETE {{baseUrl}}/location/loc_b3541045
+Accept: application/json
+
+###############################################################################
+# ERROR CASES
+###############################################################################
+
+### Create location with missing required fields (should fail)
+POST {{baseUrl}}/location
+Content-Type: application/json
+
+{
+  "name": "Incomplete Restaurant"
+}
+
+### Create location with invalid status (should fail)
+POST {{baseUrl}}/location
+Content-Type: application/json
+
+{
+  "name": "Invalid Status Restaurant",
+  "status": "invalid_status",
+  "address1": "123 Test St",
+  "city": "Detroit",
+  "region": "Michigan",
+  "zip": "48201",
+  "country": "US"
+}
+
+### Update non-existent location (should return 404)
+PUT {{baseUrl}}/location
+Content-Type: application/json
+
+{
+  "locationid": "nonexistent-id",
+  "name": "Does Not Exist",
+  "status": "active",
+  "address1": "123 Test St",
+  "city": "Detroit",
+  "region": "Michigan",
+  "zip": "48201",
+  "country": "US"
+}

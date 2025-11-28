@@ -2,7 +2,7 @@
 -- This file is loaded only when the 'test' profile is active
 
 -- Insert test locations
-INSERT INTO detroitchow.locations (locationid, name, description, status, address1, city, locality, zip, region, country, phone1, lat, lng, website, facebook, instagram, hours, create_date, create_user, updated_date, update_user)
+INSERT INTO detroitchow.locations (locationid, name, description, operating_status, address1, city, locality, zip, region, country, phone1, lat, lng, website, facebook, instagram, hours, create_date, create_user, updated_date, update_user)
 VALUES
 ('loc-001', 'Lafayette Coney Island', 'Historic Detroit coney island restaurant serving classic hot dogs and Greek-American fare since 1924', 'active', '118 W Lafayette Blvd', 'Detroit', 'Downtown', '48226', 'MI', 'US', '313-964-8198', '42.3297', '-83.0458', 'https://www.coneydetroit.com', 'https://facebook.com/lafayetteconeyisland', 'https://instagram.com/lafayetteconeyisland', 'Mon-Sun: 24 hours', CURRENT_TIMESTAMP, 'system', CURRENT_TIMESTAMP, 'system'),
 

@@ -18,11 +18,17 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: false
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
 
 logging:
   level:
     root: WARN
-    com.detroitchow: INFO
+    com.detroitchow: DEBUG
     org.springframework.web: INFO
 
 server:

@@ -1,7 +1,6 @@
 package com.detroitchow.admin.service;
 
 import com.detroitchow.admin.entity.Location;
-import com.detroitchow.admin.entity.Location.LocationStatus;
 import com.detroitchow.admin.repository.LocationRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,7 +31,7 @@ class LocationServiceTest {
         Location locationToCreate = Location.builder()
                 .name("New Restaurant")
                 .description("A new restaurant")
-                .status(LocationStatus.active)
+                .operatingStatus("active")
                 .address1("456 Oak Ave")
                 .city("Detroit")
                 .region("Michigan")
@@ -48,7 +47,7 @@ class LocationServiceTest {
         assertThat(created.getLocationid()).startsWith("loc_");
         assertThat(created.getName()).isEqualTo("New Restaurant");
         assertThat(created.getDescription()).isEqualTo("A new restaurant");
-        assertThat(created.getStatus()).isEqualTo(LocationStatus.active);
+        assertThat(created.getOperatingStatus()).isEqualTo("active");
         assertThat(created.getCreateDate()).isNotNull();
         assertThat(created.getUpdatedDate()).isNotNull();
 
@@ -71,7 +70,7 @@ class LocationServiceTest {
         assertThat(result.get().getLocationid()).isEqualTo("loc-001");
         assertThat(result.get().getName()).isEqualTo("Lafayette Coney Island");
         assertThat(result.get().getCity()).isEqualTo("Detroit");
-        assertThat(result.get().getStatus()).isEqualTo(LocationStatus.active);
+        assertThat(result.get().getOperatingStatus()).isEqualTo("active");
     }
 
     @Test
@@ -94,7 +93,7 @@ class LocationServiceTest {
                 .locationid("loc-001")
                 .name("Updated Lafayette Coney Island")
                 .description("Updated description")
-                .status(LocationStatus.active)
+                .operatingStatus("active")
                 .address1("999 Updated St")
                 .city("Detroit")
                 .region("Michigan")
@@ -142,7 +141,7 @@ class LocationServiceTest {
         Location toDelete = Location.builder()
                 .name("To Be Deleted")
                 .city("Detroit")
-                .status(LocationStatus.active)
+                .operatingStatus("active")
                 .build();
         Location created = locationService.createLocation(toDelete);
         String locationId = created.getLocationid();
@@ -184,7 +183,7 @@ class LocationServiceTest {
         assertThat(result).anyMatch(loc -> loc.getLocationid().equals("loc-001"));
         assertThat(result).anyMatch(loc -> loc.getName().equals("Lafayette Coney Island"));
         assertThat(result).anyMatch(loc -> loc.getName().equals("Buddy's Pizza"));
-        assertThat(result).anyMatch(loc -> loc.getStatus() == LocationStatus.temporarily_closed); // loc-008
+        assertThat(result).anyMatch(loc -> loc.getOperatingStatus().equals("temporarily_closed")); // loc-008
     }
 
     @Test
@@ -248,7 +247,7 @@ class LocationServiceTest {
                 .locationid("loc-001")
                 .name("Fully Updated Restaurant")
                 .description("Completely new description")
-                .status(LocationStatus.temporarily_closed)
+                .operatingStatus("temporarily_closed")
                 .address1("111 New St")
                 .address2("Suite 200")
                 .city("Ann Arbor")
@@ -277,7 +276,7 @@ class LocationServiceTest {
         // Then
         assertThat(updated.getName()).isEqualTo("Fully Updated Restaurant");
         assertThat(updated.getDescription()).isEqualTo("Completely new description");
-        assertThat(updated.getStatus()).isEqualTo(LocationStatus.temporarily_closed);
+        assertThat(updated.getOperatingStatus()).isEqualTo("temporarily_closed");
         assertThat(updated.getAddress1()).isEqualTo("111 New St");
         assertThat(updated.getAddress2()).isEqualTo("Suite 200");
         assertThat(updated.getCity()).isEqualTo("Ann Arbor");
@@ -311,7 +310,7 @@ class LocationServiceTest {
         // Then
         assertThat(result).isPresent();
         assertThat(result.get().getName()).isEqualTo("Closed Test Restaurant");
-        assertThat(result.get().getStatus()).isEqualTo(LocationStatus.temporarily_closed);
+        assertThat(result.get().getOperatingStatus()).isEqualTo("temporarily_closed");
     }
 
     @Test

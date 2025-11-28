@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface LocationRepository extends JpaRepository<Location, String> {
 
-    @Query("SELECT l FROM Location l WHERE l.status in ('active', 'temporarily_closed')")
+    @Query("SELECT l FROM Location l WHERE l.operatingStatus in ('active', 'temporarily_closed')")
     List<Location> getAllLocations();
     Optional<Location> findByLocationid(String locationid);
 }

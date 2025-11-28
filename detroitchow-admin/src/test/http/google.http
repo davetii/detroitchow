@@ -1,0 +1,35 @@
+### DetroitChow Admin API - Google Places Endpoints
+### Environment: Use http-client.env.json to switch between dev/prod
+### Run in IntelliJ IDEA or VS Code (with REST Client extension)
+
+###############################################################################
+# GET ALL Google Place Locations
+###############################################################################
+
+### Get all active and temporarily closed locations
+GET {{baseUrl}}/googleplaces
+Accept: application/json
+
+###############################################################################
+# GET GooglePlace BY ID
+###############################################################################
+
+### Get GooglePlace by ID (replace with actual locationid)
+GET {{baseUrl}}/googleplace/2
+Accept: application/json
+
+### Get location by ID - Not Found Example
+GET {{baseUrl}}/googleplace/bob
+Accept: application/json
+
+###############################################################################
+# GET GooglePlace BY Place ID
+###############################################################################
+
+### Get GooglePlace by ID (replace with actual locationid)
+GET {{baseUrl}}/googleplace/place/ChIJk_ktisPHJIgRV9-Lk-vyEHo
+Accept: application/json
+
+### Get location by ID - Not Found Example
+GET {{baseUrl}}/googleplace/place/bob
+Accept: application/json

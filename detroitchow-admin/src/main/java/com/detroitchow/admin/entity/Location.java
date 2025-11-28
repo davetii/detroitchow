@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -39,9 +41,9 @@ public class Location implements Serializable {
     @Column(name = "description", length = 2000)
     private String description;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", columnDefinition = "detroitchow.location_status")
-    private LocationStatus status;
+
+    @Column(name = "operating_status", nullable = false, length = 20)
+    private String operatingStatus;
 
     @Column(name = "address1", length = 500)
     private String address1;
@@ -119,9 +121,6 @@ public class Location implements Serializable {
     @Builder.Default
     private List<Menu> menus = new ArrayList<>();
 
-    @OneToOne(mappedBy = "location", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private GooglePlaces googlePlaces;
-
     @PrePersist
     protected void onCreate() {
         if (createDate == null) {
@@ -135,7 +134,5 @@ public class Location implements Serializable {
         updatedDate = OffsetDateTime.now();
     }
 
-    public enum LocationStatus {
-        active, temporarily_closed, permanently_closed
-    }
+
 }

@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -26,7 +25,7 @@ public class GooglePlaces implements Serializable {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "locationid", length = 50, insertable = false, updatable = false)
+    @Column(name = "locationid", length = 50, nullable = false)
     private String locationid;
 
     @Column(name = "place_id", length = 500, nullable = false)
@@ -76,11 +75,6 @@ public class GooglePlaces implements Serializable {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "locationid", referencedColumnName = "locationid", nullable = false)
-    @JsonIgnore
-    private Location location;
 
     @PrePersist
     protected void onCreate() {

@@ -25,7 +25,7 @@ class LocationRepositoryTest {
         assertEquals("118 W Lafayette Blvd", location.get().getAddress1());
         assertEquals("Lafayette Coney Island", location.get().getName());
         assertEquals("313-964-8198", location.get().getPhone1());
-        assertEquals("active", location.get().getStatus().toString());
+        assertEquals("active", location.get().getOperatingStatus().toString());
         assertEquals("48226", location.get().getZip());
         assertEquals("MI", location.get().getRegion());
         assertEquals("US", location.get().getCountry());

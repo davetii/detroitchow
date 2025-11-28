@@ -62,7 +62,7 @@ public class LocationService {
         // Update fields
         existingLocation.setName(location.getName());
         existingLocation.setDescription(location.getDescription());
-        existingLocation.setStatus(location.getStatus());
+        existingLocation.setOperatingStatus(location.getOperatingStatus());
         existingLocation.setAddress1(location.getAddress1());
         existingLocation.setAddress2(location.getAddress2());
         existingLocation.setCity(location.getCity());

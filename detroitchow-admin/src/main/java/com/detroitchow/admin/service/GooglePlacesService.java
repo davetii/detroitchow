@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,6 +21,13 @@ public class GooglePlacesService {
 
     private final GooglePlacesRepository googlePlacesRepository;
     private final LocationRepository locationRepository;
+
+    /**
+     * Get all Google Places data
+     */
+    public List<GooglePlaces> getAllGooglePlaces() {
+        return googlePlacesRepository.findAll();
+    }
 
     /**
      * Get Google Places data for a location
@@ -46,15 +54,14 @@ public class GooglePlacesService {
             return updateGooglePlaces(existing.get().getId(), googlePlaces);
         }
 
+        // Verify location exists
         Optional<Location> locationOpt = locationRepository.findById(locationId);
         if (locationOpt.isEmpty()) {
             throw new GooglePlacesNotFoundException("Location not found: " + locationId);
         }
 
-        Location location = locationOpt.get();
-
-        // Set the location relationship (this sets locationid via FK)
-        googlePlaces.setLocation(location);
+        // Set the locationid directly (no more relationship)
+        googlePlaces.setLocationid(locationId);
         if (googlePlaces.getCreatedAt() == null) {
             googlePlaces.setCreatedAt(LocalDateTime.now());
         }

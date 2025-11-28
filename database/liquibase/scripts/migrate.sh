@@ -25,7 +25,9 @@ echo "Running migrations using Maven..."
 echo ""
 
 # Run Liquibase update via Maven
-mvn liquibase:update -Plocalif [ $? -eq 0 ]; then
+mvn liquibase:update -Plocal
+
+if [ $? -eq 0 ]; then
     echo ""
     echo "✓ Migrations completed successfully!"
 else

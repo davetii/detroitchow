@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS detroitchow.locations (
     locationid VARCHAR(50) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description VARCHAR(2000),
-    status VARCHAR(50) DEFAULT 'active',
+    operating_status VARCHAR(50) DEFAULT 'active',
     address1 VARCHAR(500),
     address2 VARCHAR(500),
     city VARCHAR(100),
@@ -72,9 +72,9 @@ CREATE TABLE IF NOT EXISTS detroitchow.google_places (
 );
 
 -- Indexes
-CREATE INDEX IF NOT EXISTS idx_locations_status ON detroitchow.locations(status);
+CREATE INDEX IF NOT EXISTS idx_locations_operating_status ON detroitchow.locations(operating_status);
 CREATE INDEX IF NOT EXISTS idx_locations_city ON detroitchow.locations(city);
 CREATE INDEX IF NOT EXISTS idx_locations_region ON detroitchow.locations(region);
 CREATE INDEX IF NOT EXISTS idx_locations_country ON detroitchow.locations(country);
 CREATE INDEX IF NOT EXISTS idx_locations_locality ON detroitchow.locations(locality);
-CREATE INDEX IF NOT EXISTS idx_locations_status_city ON detroitchow.locations(status, city);
+CREATE INDEX IF NOT EXISTS idx_locations_status_city ON detroitchow.locations(operating_status, city);

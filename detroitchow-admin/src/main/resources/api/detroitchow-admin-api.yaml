@@ -20,6 +20,8 @@ tags:
     description: Operations for managing Detroit Chow locations
   - name: Menus
     description: Operations for managing location menus
+  - name: GooglePlaces
+    description: Operations for managing Google Places data
 
 paths:
   /locations:
@@ -359,11 +361,176 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 
+  /googleplaces:
+    get:
+      tags:
+        - GooglePlaces
+      summary: Get all Google Places records
+      description: Returns a list of all Google Places records
+      operationId: getAllGooglePlaces
+      responses:
+        '200':
+          description: Successfully retrieved all Google Places
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GooglePlaces'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /googleplace/{locationid}:
+    get:
+      tags:
+        - GooglePlaces
+      summary: Get Google Places data by location ID
+      description: Returns Google Places data associated with a specific Detroit Chow location
+      operationId: getGooglePlaceByLocationId
+      parameters:
+        - name: locationid
+          in: path
+          required: true
+          description: The Detroit Chow location ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved Google Places data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/GooglePlaces'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /googleplace/place/{place_id}:
+    get:
+      tags:
+        - GooglePlaces
+      summary: Get Google Places data by Google place_id
+      description: Returns Google Places data by Google's place_id
+      operationId: getGooglePlaceByPlaceId
+      parameters:
+        - name: place_id
+          in: path
+          required: true
+          description: The Google Places place_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved Google Places data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/GooglePlaces'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /googleplace:
+    post:
+      tags:
+        - GooglePlaces
+      summary: Create Google Places data for a location
+      description: Creates Google Places data and associates it with a location
+      operationId: createGooglePlace
+      requestBody:
+        required: true
+        description: Google Places data to be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GooglePlacesInput'
+      responses:
+        '201':
+          description: Google Places data successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/GooglePlaces'
+                  message:
+                    type: string
+                    example: Google Places data created successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      tags:
+        - GooglePlaces
+      summary: Update Google Places data
+      description: Updates existing Google Places data for a location
+      operationId: updateGooglePlace
+      requestBody:
+        required: true
+        description: Google Places data to be updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GooglePlacesInput'
+      responses:
+        '200':
+          description: Google Places data successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/GooglePlaces'
+                  message:
+                    type: string
+                    example: Google Places data updated successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags:
+        - GooglePlaces
+      summary: Delete Google Places data
+      description: Removes Google Places data for a location
+      operationId: deleteGooglePlace
+      parameters:
+        - name: locationid
+          in: query
+          required: true
+          description: The Detroit Chow location ID
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Google Places data successfully deleted
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
 components:
   schemas:
     Location:
       type: object
-      description: Detroit Chow location with all fields including menus and Google Places data
+      description: Detroit Chow location with all fields including menus
       required:
         - locationid
         - name
@@ -485,8 +652,6 @@ components:
           description: Array of menus associated with this location, ordered by priority
           items:
             $ref: '#/components/schemas/Menu'
-        googlePlaces:
-          $ref: '#/components/schemas/GooglePlaces'
 
     LocationInput:
       type: object
@@ -597,8 +762,6 @@ components:
           description: Array of menus associated with this location
           items:
             $ref: '#/components/schemas/MenuInput'
-        googlePlaces:
-          $ref: '#/components/schemas/GooglePlacesInput'
 
     Menu:
       type: object
@@ -646,8 +809,14 @@ components:
     GooglePlaces:
       type: object
       description: Google Places data associated with a location
-      nullable: true
+      required:
+        - locationid
+        - place_id
       properties:
+        locationid:
+          type: string
+          description: Detroit Chow location ID
+          example: "loc_12345"
         place_id:
           type: string
           description: Google Places API place ID
@@ -707,8 +876,14 @@ components:
     GooglePlacesInput:
       type: object
       description: Google Places data input (for creation/updates)
-      nullable: true
+      required:
+        - locationid
+        - place_id
       properties:
+        locationid:
+          type: string
+          description: Detroit Chow location ID to associate with
+          example: "loc_12345"
         place_id:
           type: string
           description: Google Places API place ID
