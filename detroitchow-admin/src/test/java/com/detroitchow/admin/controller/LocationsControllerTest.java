@@ -110,7 +110,7 @@ class LocationsControllerTest {
         when(locationMapper.toDto(location2)).thenReturn(locationDto2);
 
         // When & Then
-        mockMvc.perform(get("/api/v1/locations")
+        mockMvc.perform(get("/locations")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -133,7 +133,7 @@ class LocationsControllerTest {
         when(locationService.getAllLocations()).thenReturn(Arrays.asList());
 
         // When & Then
-        mockMvc.perform(get("/api/v1/locations")
+        mockMvc.perform(get("/locations")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -150,7 +150,7 @@ class LocationsControllerTest {
         when(locationMapper.toDto(testLocation)).thenReturn(testLocationDto);
 
         // When & Then
-        mockMvc.perform(get("/api/v1/location/loc-001")
+        mockMvc.perform(get("/location/loc-001")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -174,7 +174,7 @@ class LocationsControllerTest {
         when(locationService.getLocationById("nonexistent")).thenReturn(Optional.empty());
 
         // When & Then
-        mockMvc.perform(get("/api/v1/location/nonexistent")
+        mockMvc.perform(get("/location/nonexistent")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound());
@@ -228,7 +228,7 @@ class LocationsControllerTest {
         when(locationMapper.toDto(savedLocation)).thenReturn(savedLocationDto);
 
         // When & Then
-        mockMvc.perform(post("/api/v1/location")
+        mockMvc.perform(post("/location")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newLocationDto)))
                 .andDo(print())
@@ -273,7 +273,7 @@ class LocationsControllerTest {
         when(locationMapper.toDto(savedLocation)).thenReturn(savedDto);
 
         // When & Then
-        mockMvc.perform(post("/api/v1/location")
+        mockMvc.perform(post("/location")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(minimalDto)))
                 .andDo(print())
@@ -327,7 +327,7 @@ class LocationsControllerTest {
         when(locationMapper.toDto(updatedLocation)).thenReturn(updatedDto);
 
         // When & Then
-        mockMvc.perform(put("/api/v1/location")
+        mockMvc.perform(put("/location")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateDto)))
                 .andDo(print())
@@ -362,7 +362,7 @@ class LocationsControllerTest {
                 .thenThrow(new LocationService.LocationNotFoundException("Location not found: nonexistent"));
 
         // When & Then
-        mockMvc.perform(put("/api/v1/location")
+        mockMvc.perform(put("/location")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateDto)))
                 .andDo(print())
@@ -380,7 +380,7 @@ class LocationsControllerTest {
         doNothing().when(locationService).deleteLocation("loc-001");
 
         // When & Then
-        mockMvc.perform(delete("/api/v1/location/loc-001")
+        mockMvc.perform(delete("/location/loc-001")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNoContent());
@@ -396,7 +396,7 @@ class LocationsControllerTest {
                 .when(locationService).deleteLocation("nonexistent");
 
         // When & Then
-        mockMvc.perform(delete("/api/v1/location/nonexistent")
+        mockMvc.perform(delete("/location/nonexistent")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound());
@@ -464,7 +464,7 @@ class LocationsControllerTest {
         when(locationMapper.toDto(savedLocation)).thenReturn(savedDto);
 
         // When & Then
-        mockMvc.perform(post("/api/v1/location")
+        mockMvc.perform(post("/location")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(fullLocationDto)))
                 .andDo(print())
@@ -499,7 +499,7 @@ class LocationsControllerTest {
         when(locationMapper.toDto(osmLocation)).thenReturn(osmDto);
 
         // When & Then
-        mockMvc.perform(get("/api/v1/location/" + osmId)
+        mockMvc.perform(get("/location/" + osmId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -547,7 +547,7 @@ class LocationsControllerTest {
         when(locationMapper.toDto(updatedLocation)).thenReturn(updatedDto);
 
         // When & Then
-        mockMvc.perform(put("/api/v1/location")
+        mockMvc.perform(put("/location")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateDto)))
                 .andDo(print())

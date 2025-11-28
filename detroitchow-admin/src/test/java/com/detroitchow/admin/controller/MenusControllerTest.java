@@ -101,7 +101,7 @@ class MenusControllerTest {
         when(menuMapper.toDto(testMenu2)).thenReturn(testMenuDto2);
 
         // When & Then
-        mockMvc.perform(get("/api/v1/location/{locationId}/menus", locationId)
+        mockMvc.perform(get("/location/{locationId}/menus", locationId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -127,7 +127,7 @@ class MenusControllerTest {
         when(menuService.getMenusByLocationId(locationId)).thenReturn(Collections.emptyList());
 
         // When & Then
-        mockMvc.perform(get("/api/v1/location/{locationId}/menus", locationId)
+        mockMvc.perform(get("/location/{locationId}/menus", locationId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -147,7 +147,7 @@ class MenusControllerTest {
                 .thenThrow(new MenuService.MenuNotFoundException("Location not found: " + locationId));
 
         // When & Then
-        mockMvc.perform(get("/api/v1/location/{locationId}/menus", locationId)
+        mockMvc.perform(get("/location/{locationId}/menus", locationId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound());
@@ -167,7 +167,7 @@ class MenusControllerTest {
         when(menuMapper.toDto(testMenu1)).thenReturn(testMenuDto1);
 
         // When & Then
-        mockMvc.perform(get("/api/v1/location/{locationId}/menus", locationId)
+        mockMvc.perform(get("/location/{locationId}/menus", locationId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -219,7 +219,7 @@ class MenusControllerTest {
         when(menuMapper.toDto(savedMenu)).thenReturn(savedMenuDto);
 
         // When & Then
-        mockMvc.perform(post("/api/v1/location/{locationId}/menus", locationId)
+        mockMvc.perform(post("/location/{locationId}/menus", locationId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newMenuDto)))
                 .andDo(print())
@@ -265,7 +265,7 @@ class MenusControllerTest {
         when(menuMapper.toDto(savedMenu)).thenReturn(savedMenuDto);
 
         // When & Then
-        mockMvc.perform(post("/api/v1/location/{locationId}/menus", locationId)
+        mockMvc.perform(post("/location/{locationId}/menus", locationId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(minimalMenuDto)))
                 .andDo(print())
@@ -297,7 +297,7 @@ class MenusControllerTest {
                 .thenThrow(new MenuService.MenuNotFoundException("Location not found: " + locationId));
 
         // When & Then
-        mockMvc.perform(post("/api/v1/location/{locationId}/menus", locationId)
+        mockMvc.perform(post("/location/{locationId}/menus", locationId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newMenuDto)))
                 .andDo(print())
@@ -348,7 +348,7 @@ class MenusControllerTest {
         when(menuMapper.toDto(savedMenu)).thenReturn(savedMenuDto);
 
         // When & Then
-        mockMvc.perform(post("/api/v1/location/{locationId}/menus", locationId)
+        mockMvc.perform(post("/location/{locationId}/menus", locationId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(fullMenuDto)))
                 .andDo(print())
@@ -373,7 +373,7 @@ class MenusControllerTest {
         when(menuMapper.toDto(testMenu1)).thenReturn(testMenuDto1);
 
         // When & Then
-        mockMvc.perform(get("/api/v1/location/{locationId}/menus", osmLocationId)
+        mockMvc.perform(get("/location/{locationId}/menus", osmLocationId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -417,7 +417,7 @@ class MenusControllerTest {
         when(menuMapper.toDto(savedMenu)).thenReturn(savedMenuDto);
 
         // When & Then
-        mockMvc.perform(post("/api/v1/location/{locationId}/menus", osmLocationId)
+        mockMvc.perform(post("/location/{locationId}/menus", osmLocationId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newMenuDto)))
                 .andDo(print())
@@ -479,7 +479,7 @@ class MenusControllerTest {
         when(menuMapper.toDto(menu1)).thenReturn(menuDto1);
 
         // When & Then
-        mockMvc.perform(get("/api/v1/location/{locationId}/menus", locationId)
+        mockMvc.perform(get("/location/{locationId}/menus", locationId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())

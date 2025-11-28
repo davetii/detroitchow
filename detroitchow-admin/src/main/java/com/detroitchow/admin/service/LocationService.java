@@ -5,6 +5,8 @@ import com.detroitchow.admin.repository.LocationRepository;
 import com.detroitchow.admin.repository.MenuRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +25,10 @@ import java.util.UUID;
 public class LocationService {
 
     private final LocationRepository locationRepository;
+
+    @Cacheable(value = "locations", key = "'all'")
     public List<Location> getAllLocations() {
+        log.info("Fetching all locations from database (cache miss)");
         return locationRepository.getAllLocations();
     }
 
@@ -31,18 +36,20 @@ public class LocationService {
         return locationRepository.findById(id);
     }
 
+    @CacheEvict(value = "locations", key = "'all'")
     public Location createLocation(Location location) {
         if (location.getLocationid() == null || location.getLocationid().isEmpty()) {
             location.setLocationid(generateLocationId());
         }
         location.setCreateDate(OffsetDateTime.now());
         location.setUpdatedDate(OffsetDateTime.now());
-        
+
         Location saved = locationRepository.save(location);
-        log.info("Location created: {}", saved.getLocationid());
+        log.info("Location created: {}, cache invalidated", saved.getLocationid());
         return saved;
     }
 
+    @CacheEvict(value = "locations", key = "'all'")
     public Location updateLocation(Location location) {
         Optional<Location> existing = locationRepository.findById(location.getLocationid());
         
@@ -80,16 +87,17 @@ public class LocationService {
         existingLocation.setUpdatedDate(OffsetDateTime.now());
 
         Location updated = locationRepository.save(existingLocation);
-        log.info("Location updated: {}", updated.getLocationid());
+        log.info("Location updated: {}, cache invalidated", updated.getLocationid());
         return updated;
     }
 
+    @CacheEvict(value = "locations", key = "'all'")
     public void deleteLocation(String id) {
         if (!locationRepository.existsById(id)) {
             throw new LocationNotFoundException("Location not found: " + id);
         }
         locationRepository.deleteById(id);
-        log.info("Location deleted: {}", id);
+        log.info("Location deleted: {}, cache invalidated", id);
     }
 
     private String generateLocationId() {
