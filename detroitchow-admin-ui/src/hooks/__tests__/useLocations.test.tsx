@@ -10,7 +10,7 @@ const mockLocations = [
   {
     locationid: 'loc-001',
     name: 'Test Restaurant 1',
-    status: 'active',
+    operatingStatus: 'active',
     address1: '123 Test St',
     city: 'Detroit',
     region: 'Michigan',
@@ -20,7 +20,7 @@ const mockLocations = [
   {
     locationid: 'loc-002',
     name: 'Test Restaurant 2',
-    status: 'active',
+    operatingStatus: 'active',
     address1: '456 Main St',
     city: 'Ann Arbor',
     region: 'Michigan',

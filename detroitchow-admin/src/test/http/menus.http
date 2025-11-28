@@ -1,0 +1,207 @@
+### DetroitChow Admin API - Menu Endpoints
+### Environment: Use http-client.env.json to switch between dev/prod
+### Run in IntelliJ IDEA or VS Code (with REST Client extension)
+
+###############################################################################
+# GET MENUS FOR A LOCATION
+###############################################################################
+
+### Get all menus for a specific location (replace locationid)
+GET {{baseUrl}}/location/32/menus
+Accept: application/json
+
+### Get menus for location - Not Found Example
+GET {{baseUrl}}/location/nonexistent/menus
+Accept: application/json
+
+###############################################################################
+# GET MENU BY ID
+###############################################################################
+
+### Get a specific menu by ID (replace menuId)
+GET {{baseUrl}}/menu/1
+Accept: application/json
+
+### Get menu by ID - Not Found Example
+GET {{baseUrl}}/menu/99999
+Accept: application/json
+
+###############################################################################
+# ADD MENU TO LOCATION
+###############################################################################
+
+### Add a menu link to a location
+POST {{baseUrl}}/location/32/menus
+Content-Type: application/json
+
+{
+  "menuType": "LINK",
+  "menuUrl": "https://example.com/menu.pdf",
+  "displayOrder": 1
+}
+
+### Add a menu image to a location
+POST {{baseUrl}}/location/32/menus
+Content-Type: application/json
+
+{
+  "menuType": "IMAGE",
+  "menuUrl": "https://example.com/images/menu1.jpg",
+  "displayOrder": 1
+}
+
+### Add multiple menus (run these sequentially)
+POST {{baseUrl}}/location/32/menus
+Content-Type: application/json
+
+{
+  "menuType": "LINK",
+  "menuUrl": "https://example.com/lunch-menu.pdf",
+  "displayOrder": 1
+}
+
+###
+
+POST {{baseUrl}}/location/32/menus
+Content-Type: application/json
+
+{
+  "menuType": "LINK",
+  "menuUrl": "https://example.com/dinner-menu.pdf",
+  "displayOrder": 2
+}
+
+###
+
+POST {{baseUrl}}/location/32/menus
+Content-Type: application/json
+
+{
+  "menuType": "IMAGE",
+  "menuUrl": "https://example.com/images/drinks-menu.jpg",
+  "displayOrder": 3
+}
+
+###############################################################################
+# UPDATE MENU
+###############################################################################
+
+### Update an existing menu (replace menuId)
+PUT {{baseUrl}}/menu/1
+Content-Type: application/json
+
+{
+  "menuType": "LINK",
+  "menuUrl": "https://example.com/updated-menu.pdf",
+  "displayOrder": 1
+}
+
+### Update menu display order only
+PUT {{baseUrl}}/menu/1
+Content-Type: application/json
+
+{
+  "menuType": "LINK",
+  "menuUrl": "https://example.com/menu.pdf",
+  "displayOrder": 5
+}
+
+### Change menu type from LINK to IMAGE
+PUT {{baseUrl}}/menu/1
+Content-Type: application/json
+
+{
+  "menuType": "IMAGE",
+  "menuUrl": "https://example.com/images/menu.jpg",
+  "displayOrder": 1
+}
+
+###############################################################################
+# DELETE MENU
+###############################################################################
+
+### Delete a menu by ID (replace menuId)
+DELETE {{baseUrl}}/menu/1
+Accept: application/json
+
+### Delete menu - Not Found Example
+DELETE {{baseUrl}}/menu/99999
+Accept: application/json
+
+###############################################################################
+# REORDER MENUS
+###############################################################################
+
+### Reorder menus for a location (replace locationid and menuIds)
+POST {{baseUrl}}/location/32/menus/reorder
+Content-Type: application/json
+
+{
+  "menuIds": [3, 1, 2]
+}
+
+### Reorder with different order
+POST {{baseUrl}}/location/32/menus/reorder
+Content-Type: application/json
+
+{
+  "menuIds": [1, 2, 3]
+}
+
+###############################################################################
+# ERROR CASES
+###############################################################################
+
+### Add menu with missing required fields (should fail)
+POST {{baseUrl}}/location/32/menus
+Content-Type: application/json
+
+{
+  "menuType": "LINK"
+}
+
+### Add menu with invalid menuType (should fail)
+POST {{baseUrl}}/location/32/menus
+Content-Type: application/json
+
+{
+  "menuType": "INVALID_TYPE",
+  "menuUrl": "https://example.com/menu.pdf",
+  "displayOrder": 1
+}
+
+### Add menu with invalid URL format (should fail)
+POST {{baseUrl}}/location/32/menus
+Content-Type: application/json
+
+{
+  "menuType": "LINK",
+  "menuUrl": "not-a-valid-url",
+  "displayOrder": 1
+}
+
+### Update menu for non-existent menu ID (should return 404)
+PUT {{baseUrl}}/menu/99999
+Content-Type: application/json
+
+{
+  "menuType": "LINK",
+  "menuUrl": "https://example.com/menu.pdf",
+  "displayOrder": 1
+}
+
+### Reorder menus with invalid menu IDs (should fail)
+POST {{baseUrl}}/location/32/menus/reorder
+Content-Type: application/json
+
+{
+  "menuIds": [99999, 88888]
+}
+
+### Reorder menus for non-existent location (should return 404)
+POST {{baseUrl}}/location/nonexistent/menus/reorder
+Content-Type: application/json
+
+{
+  "menuIds": [1, 2, 3]
+}

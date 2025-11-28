@@ -147,6 +147,13 @@ Run tests with UI:
 npm run test:ui
 ```
 
+Run tests for coverage:
+
+```bash
+npm run test -- --coverage
+```
+
+
 ## Building for Production
 
 Build the project:

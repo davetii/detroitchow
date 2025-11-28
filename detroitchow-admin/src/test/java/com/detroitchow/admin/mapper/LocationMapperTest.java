@@ -1,12 +1,9 @@
 package com.detroitchow.admin.mapper;
 
-import com.detroitchow.admin.dto.GooglePlacesDto;
 import com.detroitchow.admin.dto.LocationDto;
 import com.detroitchow.admin.dto.MenuDto;
-import com.detroitchow.admin.entity.GooglePlaces;
 import com.detroitchow.admin.entity.Location;
 import com.detroitchow.admin.entity.Menu;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,14 +18,12 @@ class LocationMapperTest {
 
     private LocationMapper locationMapper;
     private MenuMapper menuMapper;
-    private GooglePlacesMapper googlePlacesMapper;
     private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
         menuMapper = new MenuMapper();
-        googlePlacesMapper = new GooglePlacesMapper();
-        locationMapper = new LocationMapper(menuMapper, googlePlacesMapper);
+        locationMapper = new LocationMapper(menuMapper);
         objectMapper = new ObjectMapper();
     }
 
@@ -42,7 +37,7 @@ class LocationMapperTest {
                 .locationid("loc-123")
                 .name("Test Restaurant")
                 .description("A great place to eat")
-                .status(Location.LocationStatus.active)
+                .operatingStatus("active")
                 .address1("123 Main St")
                 .address2("Suite 100")
                 .city("Detroit")
@@ -77,7 +72,7 @@ class LocationMapperTest {
         assertEquals("loc-123", dto.getLocationid());
         assertEquals("Test Restaurant", dto.getName());
         assertEquals("A great place to eat", dto.getDescription());
-        assertEquals("active", dto.getStatus());
+        assertEquals("active", dto.getOperatingStatus());
         assertEquals("123 Main St", dto.getAddress1());
         assertEquals("Suite 100", dto.getAddress2());
         assertEquals("Detroit", dto.getCity());
@@ -87,8 +82,8 @@ class LocationMapperTest {
         assertEquals("US", dto.getCountry());
         assertEquals("313-555-1234", dto.getPhone1());
         assertEquals("313-555-5678", dto.getPhone2());
-        assertEquals(42.3314, dto.getLat());
-        assertEquals(-83.0458, dto.getLng());
+        assertEquals("42.3314", dto.getLat());
+        assertEquals("-83.0458", dto.getLng());
         assertEquals("https://example.com", dto.getWebsite());
         assertEquals("https://facebook.com/restaurant", dto.getFacebook());
         assertEquals("https://twitter.com/restaurant", dto.getTwitter());
@@ -119,7 +114,7 @@ class LocationMapperTest {
         Location location = Location.builder()
                 .locationid("loc-456")
                 .name("Restaurant Without Status")
-                .status(null)
+                .operatingStatus(null)
                 .build();
 
         // When
@@ -127,7 +122,7 @@ class LocationMapperTest {
 
         // Then
         assertNotNull(dto);
-        assertNull(dto.getStatus());
+        assertNull(dto.getOperatingStatus());
     }
 
     @Test
@@ -164,108 +159,8 @@ class LocationMapperTest {
 
         // Then
         assertNotNull(dto);
-        assertEquals(42.5000, dto.getLat());
-        assertEquals(-83.1000, dto.getLng());
-    }
-
-    @Test
-    void testToDto_WithMenus_ShouldMapMenus() {
-        // Given
-        Menu menu1 = Menu.builder()
-                .menuLink("https://menu1.pdf")
-                .descr("Dinner Menu")
-                .priority(1)
-                .build();
-        Menu menu2 = Menu.builder()
-                .menuLink("https://menu2.pdf")
-                .descr("Lunch Menu")
-                .priority(2)
-                .build();
-
-        Location location = Location.builder()
-                .locationid("loc-with-menus")
-                .name("Restaurant With Menus")
-                .menus(Arrays.asList(menu1, menu2))
-                .build();
-
-        // When
-        LocationDto dto = locationMapper.toDto(location);
-
-        // Then
-        assertNotNull(dto);
-        assertNotNull(dto.getMenus());
-        assertEquals(2, dto.getMenus().size());
-        assertEquals("https://menu1.pdf", dto.getMenus().get(0).getMenuLink());
-        assertEquals("Dinner Menu", dto.getMenus().get(0).getDescr());
-        assertEquals("https://menu2.pdf", dto.getMenus().get(1).getMenuLink());
-        assertEquals("Lunch Menu", dto.getMenus().get(1).getDescr());
-    }
-
-    @Test
-    void testToDto_WithNullMenus_ShouldMapAsNull() {
-        // Given
-        Location location = Location.builder()
-                .locationid("loc-no-menus")
-                .name("Restaurant Without Menus")
-                .menus(null)
-                .build();
-
-        // When
-        LocationDto dto = locationMapper.toDto(location);
-
-        // Then
-        assertNotNull(dto);
-        assertNull(dto.getMenus());
-    }
-
-    @Test
-    void testToDto_WithGooglePlaces_ShouldMapGooglePlaces() throws Exception {
-        // Given
-        JsonNode txtsearchJson = objectMapper.readTree("{\"results\":[]}");
-
-        GooglePlaces googlePlaces = GooglePlaces.builder()
-                .id(123)
-                .placeId("ChIJTest123")
-                .lat("42.3314")
-                .lng("-83.0458")
-                .formattedAddress("123 Test St, Detroit, MI")
-                .txtsearchJson(txtsearchJson)
-                .build();
-
-        Location location = Location.builder()
-                .locationid("loc-with-google")
-                .name("Restaurant With Google Places")
-                .googlePlaces(googlePlaces)
-                .build();
-
-        // When
-        LocationDto dto = locationMapper.toDto(location);
-
-        // Then
-        assertNotNull(dto);
-        assertNotNull(dto.getGooglePlaces());
-        assertEquals(123, dto.getGooglePlaces().getId());
-        assertEquals("ChIJTest123", dto.getGooglePlaces().getPlaceId());
-        assertEquals("42.3314", dto.getGooglePlaces().getLat());
-        assertEquals("-83.0458", dto.getGooglePlaces().getLng());
-        assertEquals("123 Test St, Detroit, MI", dto.getGooglePlaces().getFormattedAddress());
-    }
-
-    @Test
-    void testToDto_WithNullGooglePlaces_ShouldMapAsNull() {
-        // Given
-        Location location = Location.builder()
-                .locationid("loc-no-google")
-                .name("Restaurant Without Google Places")
-                .googlePlaces(null)
-                .build();
-
-        // When
-        LocationDto dto = locationMapper.toDto(location);
-
-        // Then
-        assertNotNull(dto);
-        assertNull(dto.getGooglePlaces());
+        assertEquals("42.5000", dto.getLat());
+        assertEquals("-83.1000", dto.getLng());
     }
 
     @Test
@@ -274,31 +169,31 @@ class LocationMapperTest {
         Location activeLocation = Location.builder()
                 .locationid("loc-active")
                 .name("Active Restaurant")
-                .status(Location.LocationStatus.active)
+                .operatingStatus("active")
                 .build();
 
         LocationDto activeDto = locationMapper.toDto(activeLocation);
-        assertEquals("active", activeDto.getStatus());
+        assertEquals("active", activeDto.getOperatingStatus());
 
         // Test temporarily_closed status
         Location tempClosedLocation = Location.builder()
                 .locationid("loc-temp-closed")
                 .name("Temporarily Closed Restaurant")
-                .status(Location.LocationStatus.temporarily_closed)
+                .operatingStatus("temporarily_closed")
                 .build();
 
         LocationDto tempClosedDto = locationMapper.toDto(tempClosedLocation);
-        assertEquals("temporarily_closed", tempClosedDto.getStatus());
+        assertEquals("temporarily_closed", tempClosedDto.getOperatingStatus());
 
         // Test permanently_closed status
         Location permClosedLocation = Location.builder()
                 .locationid("loc-perm-closed")
                 .name("Permanently Closed Restaurant")
-                .status(Location.LocationStatus.permanently_closed)
+                .operatingStatus("permanently_closed")
                 .build();
 
         LocationDto permClosedDto = locationMapper.toDto(permClosedLocation);
-        assertEquals("permanently_closed", permClosedDto.getStatus());
+        assertEquals("permanently_closed", permClosedDto.getOperatingStatus());
     }
 
     @Test
@@ -317,7 +212,7 @@ class LocationMapperTest {
         assertEquals("loc-minimal", dto.getLocationid());
         assertEquals("Minimal Restaurant", dto.getName());
         assertNull(dto.getDescription());
-        assertNull(dto.getStatus());
+        assertNull(dto.getOperatingStatus());
         assertNull(dto.getAddress1());
         assertNull(dto.getCity());
         assertNull(dto.getLat());
@@ -330,7 +225,7 @@ class LocationMapperTest {
         LocationDto dto = LocationDto.builder()
                 .locationid("loc-entity-test")
                 .name("Entity Test Restaurant")
-                .status("active")
+                .operatingStatus("active")
                 .build();
 
         // When
@@ -348,7 +243,7 @@ class LocationMapperTest {
         LocationDto dto = LocationDto.builder()
                 .locationid("loc-invalid-status")
                 .name("Invalid Status Restaurant")
-                .status("invalid_status")
+                .operatingStatus("invalid_status")
                 .build();
 
         // When
@@ -365,7 +260,7 @@ class LocationMapperTest {
         LocationDto dto = LocationDto.builder()
                 .locationid("loc-null-status")
                 .name("Null Status Restaurant")
-                .status(null)
+                .operatingStatus(null)
                 .build();
 
         // When
@@ -397,21 +292,11 @@ class LocationMapperTest {
                 .priority(1)
                 .build();
 
-        JsonNode txtsearchJson = objectMapper.readTree("{\"results\":[]}");
-
-        GooglePlaces googlePlaces = GooglePlaces.builder()
-                .id(999)
-                .placeId("ChIJComplexTest")
-                .lat("42.3000")
-                .lng("-83.0500")
-                .txtsearchJson(txtsearchJson)
-                .build();
-
         Location location = Location.builder()
                 .locationid("osm-n123456")
                 .name("Complex Test Restaurant")
                 .description("Testing all relationships")
-                .status(Location.LocationStatus.active)
+                .operatingStatus("active")
                 .address1("100 Complex Ave")
                 .city("Detroit")
                 .region("MI")
@@ -421,8 +306,6 @@ class LocationMapperTest {
                 .website("https://complex.com")
                 .createDate(now)
                 .createUser("system")
-                .menus(Arrays.asList(menu))
-                .googlePlaces(googlePlaces)
                 .build();
 
         // When
@@ -433,16 +316,9 @@ class LocationMapperTest {
         assertEquals("osm-n123456", dto.getLocationid());
         assertEquals("Complex Test Restaurant", dto.getName());
         assertEquals("Testing all relationships", dto.getDescription());
-        assertEquals("active", dto.getStatus());
-        assertEquals(42.3000, dto.getLat());
-        assertEquals(-83.0500, dto.getLng());
+        assertEquals("active", dto.getOperatingStatus());
+        assertEquals("42.3000", dto.getLat());
+        assertEquals("-83.0500", dto.getLng());
 
-        assertNotNull(dto.getMenus());
-        assertEquals(1, dto.getMenus().size());
-        assertEquals("https://dinner-menu.pdf", dto.getMenus().get(0).getMenuLink());
-
-        assertNotNull(dto.getGooglePlaces());
-        assertEquals(999, dto.getGooglePlaces().getId());
-        assertEquals("ChIJComplexTest", dto.getGooglePlaces().getPlaceId());
     }
 }

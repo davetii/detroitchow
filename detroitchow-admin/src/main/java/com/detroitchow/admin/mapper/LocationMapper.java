@@ -10,11 +10,9 @@ import java.util.stream.Collectors;
 public class LocationMapper {
 
     private final MenuMapper menuMapper;
-    private final GooglePlacesMapper googlePlacesMapper;
 
-    public LocationMapper(MenuMapper menuMapper, GooglePlacesMapper googlePlacesMapper) {
+    public LocationMapper(MenuMapper menuMapper) {
         this.menuMapper = menuMapper;
-        this.googlePlacesMapper = googlePlacesMapper;
     }
 
     /**
@@ -29,7 +27,7 @@ public class LocationMapper {
                 .locationid(location.getLocationid())
                 .name(location.getName())
                 .description(location.getDescription())
-                .status(location.getStatus() != null ? location.getStatus().name() : null)
+                .operatingStatus(location.getOperatingStatus())
                 .address1(location.getAddress1())
                 .address2(location.getAddress2())
                 .city(location.getCity())
@@ -39,8 +37,8 @@ public class LocationMapper {
                 .country(location.getCountry())
                 .phone1(location.getPhone1())
                 .phone2(location.getPhone2())
-                .lat(location.getLat() != null ? Double.parseDouble(location.getLat()) : null)
-                .lng(location.getLng() != null ? Double.parseDouble(location.getLng()) : null)
+                .lat(location.getLat())
+                .lng(location.getLng())
                 .website(location.getWebsite())
                 .facebook(location.getFacebook())
                 .twitter(location.getTwitter())
@@ -50,12 +48,6 @@ public class LocationMapper {
                 .yelp(location.getYelp())
                 .hours(location.getHours())
                 .contactText(location.getContactText())
-                .menus(location.getMenus() != null ? 
-                        location.getMenus().stream()
-                                .map(menuMapper::toDto)
-                                .collect(Collectors.toList()) : null)
-                .googlePlaces(location.getGooglePlaces() != null ? 
-                        googlePlacesMapper.toDto(location.getGooglePlaces()) : null)
                 .createDate(location.getCreateDate())
                 .createUser(location.getCreateUser())
                 .updatedDate(location.getUpdatedDate())
@@ -71,19 +63,31 @@ public class LocationMapper {
             return null;
         }
 
-        Location.LocationStatus status = null;
-        if (dto.getStatus() != null) {
-            try {
-                status = Location.LocationStatus.valueOf(dto.getStatus());
-            } catch (IllegalArgumentException e) {
-                status = Location.LocationStatus.active;
-            }
-        }
-
         return Location.builder()
                 .locationid(dto.getLocationid())
                 .name(dto.getName())
-                // ... rest of fields
+                .description(dto.getDescription())
+                .operatingStatus(dto.getOperatingStatus())
+                .address1(dto.getAddress1())
+                .address2(dto.getAddress2())
+                .city(dto.getCity())
+                .locality(dto.getLocality())
+                .zip(dto.getZip())
+                .region(dto.getRegion())
+                .country(dto.getCountry())
+                .phone1(dto.getPhone1())
+                .phone2(dto.getPhone2())
+                .hours(dto.getHours())
+                .contactText(dto.getContactText())
+                .website(dto.getWebsite())
+                .twitter(dto.getTwitter())
+                .instagram(dto.getInstagram())
+                .opentable(dto.getOpentable())
+                .tripadvisor(dto.getTripadvisor())
+                .yelp(dto.getYelp())
+                .lat(dto.getLat())
+                .lng(dto.getLng())
+                .facebook(dto.getFacebook())
                 .build();
     }
 }

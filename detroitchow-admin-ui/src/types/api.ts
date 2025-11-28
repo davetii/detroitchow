@@ -140,11 +140,99 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/googleplaces": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get all Google Places records
+         * @description Returns a list of all Google Places records
+         */
+        get: operations["getAllGooglePlaces"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/googleplace/{locationid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Google Places data by location ID
+         * @description Returns Google Places data associated with a specific Detroit Chow location
+         */
+        get: operations["getGooglePlaceByLocationId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/googleplace/place/{place_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Google Places data by Google place_id
+         * @description Returns Google Places data by Google's place_id
+         */
+        get: operations["getGooglePlaceByPlaceId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/googleplace": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Update Google Places data
+         * @description Updates existing Google Places data for a location
+         */
+        put: operations["updateGooglePlace"];
+        /**
+         * Create Google Places data for a location
+         * @description Creates Google Places data and associates it with a location
+         */
+        post: operations["createGooglePlace"];
+        /**
+         * Delete Google Places data
+         * @description Removes Google Places data for a location
+         */
+        delete: operations["deleteGooglePlace"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        /** @description Detroit Chow location with all fields including menus and Google Places data */
+        /** @description Detroit Chow location with all fields */
         Location: {
             /**
              * @description Unique identifier for the location
@@ -158,12 +246,8 @@ export interface components {
             name: string;
             /** @description Description of the restaurant */
             description?: string | null;
-            /**
-             * @description Current status of the location
-             * @default active
-             * @enum {string}
-             */
-            status: "active" | "temporarily_closed" | "permanently_closed";
+            /** @description Current status of the location */
+            operatingStatus: string;
             /**
              * @description Primary address line
              * @example 123 Main Street
@@ -202,17 +286,15 @@ export interface components {
             /** @description Secondary phone number */
             phone2?: string | null;
             /**
-             * Format: double
              * @description Latitude coordinate
              * @example 42.3314
              */
-            lat?: number;
+            lat?: string;
             /**
-             * Format: double
              * @description Longitude coordinate
              * @example -83.0458
              */
-            lng?: number;
+            lng?: string;
             /**
              * Format: uri
              * @description Restaurant website URL
@@ -252,9 +334,6 @@ export interface components {
             hours?: string | null;
             /** @description Contact information text */
             contact_text?: string | null;
-            /** @description Array of menus associated with this location, ordered by priority */
-            menus?: components["schemas"]["Menu"][];
-            googlePlaces?: components["schemas"]["GooglePlaces"];
         };
         /** @description Input schema for creating a new location (locationid not required on creation) */
         LocationInput: {
@@ -262,11 +341,7 @@ export interface components {
             name: string;
             /** @description Description of the restaurant */
             description?: string | null;
-            /**
-             * @default active
-             * @enum {string}
-             */
-            status: "active" | "temporarily_closed" | "permanently_closed";
+            operatingStatus: string;
             /** @description Primary address line */
             address1: string;
             /** @description Secondary address line */
@@ -288,16 +363,10 @@ export interface components {
             phone1?: string | null;
             /** @description Secondary phone number */
             phone2?: string | null;
-            /**
-             * Format: double
-             * @description Latitude coordinate
-             */
-            lat?: number;
-            /**
-             * Format: double
-             * @description Longitude coordinate
-             */
-            lng?: number;
+            /** @description Latitude coordinate */
+            lat?: string;
+            /** @description Longitude coordinate */
+            lng?: string;
             /**
              * Format: uri
              * @description Restaurant website URL
@@ -337,9 +406,6 @@ export interface components {
             hours?: string | null;
             /** @description Contact information text */
             contact_text?: string | null;
-            /** @description Array of menus associated with this location */
-            menus?: components["schemas"]["MenuInput"][];
-            googlePlaces?: components["schemas"]["GooglePlacesInput"];
         };
         /** @description Menu associated with a Detroit Chow location */
         Menu: {
@@ -375,22 +441,21 @@ export interface components {
         /** @description Google Places data associated with a location */
         GooglePlaces: {
             /**
+             * @description Detroit Chow location ID
+             * @example loc_12345
+             */
+            locationid: string;
+            /**
              * @description Google Places API place ID
              * @example ChIJN1blFLsB6IkRv5ZSZsJVHmM
              */
-            place_id?: string;
+            place_id: string;
             /** @description Business name from Google Places */
             name?: string;
-            /**
-             * Format: double
-             * @description Latitude from Google Places
-             */
-            lat?: number;
-            /**
-             * Format: double
-             * @description Longitude from Google Places
-             */
-            lng?: number;
+            /** @description Latitude from Google Places */
+            lat?: string;
+            /** @description Longitude from Google Places */
+            lng?: string;
             /** @description Primary phone number from Google Places */
             phone1?: string | null;
             /** @description Secondary phone number from Google Places */
@@ -424,23 +489,22 @@ export interface components {
             store_json?: {
                 [key: string]: unknown;
             } | null;
-        } | null;
+        };
         /** @description Google Places data input (for creation/updates) */
         GooglePlacesInput: {
+            /**
+             * @description Detroit Chow location ID to associate with
+             * @example loc_12345
+             */
+            locationid: string;
             /** @description Google Places API place ID */
-            place_id?: string;
+            place_id: string;
             /** @description Business name from Google Places */
             name?: string;
-            /**
-             * Format: double
-             * @description Latitude from Google Places
-             */
-            lat?: number;
-            /**
-             * Format: double
-             * @description Longitude from Google Places
-             */
-            lng?: number;
+            /** @description Latitude from Google Places */
+            lat?: string;
+            /** @description Longitude from Google Places */
+            lng?: string;
             /** @description Primary phone number from Google Places */
             phone1?: string | null;
             /** @description Secondary phone number from Google Places */
@@ -474,7 +538,7 @@ export interface components {
             store_json?: {
                 [key: string]: unknown;
             } | null;
-        } | null;
+        };
         Error: {
             /** @description Error code */
             code: string;
@@ -840,6 +904,168 @@ export interface operations {
                 };
             };
             400: components["responses"]["BadRequest"];
+            404: components["responses"]["NotFound"];
+            500: components["responses"]["InternalServerError"];
+        };
+    };
+    getAllGooglePlaces: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successfully retrieved all Google Places */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GooglePlaces"][];
+                };
+            };
+            500: components["responses"]["InternalServerError"];
+        };
+    };
+    getGooglePlaceByLocationId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The Detroit Chow location ID */
+                locationid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successfully retrieved Google Places data */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["GooglePlaces"];
+                    };
+                };
+            };
+            404: components["responses"]["NotFound"];
+            500: components["responses"]["InternalServerError"];
+        };
+    };
+    getGooglePlaceByPlaceId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The Google Places place_id */
+                place_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successfully retrieved Google Places data */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["GooglePlaces"];
+                    };
+                };
+            };
+            404: components["responses"]["NotFound"];
+            500: components["responses"]["InternalServerError"];
+        };
+    };
+    updateGooglePlace: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Google Places data to be updated */
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GooglePlacesInput"];
+            };
+        };
+        responses: {
+            /** @description Google Places data successfully updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["GooglePlaces"];
+                        /** @example Google Places data updated successfully */
+                        message?: string;
+                    };
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            404: components["responses"]["NotFound"];
+            500: components["responses"]["InternalServerError"];
+        };
+    };
+    createGooglePlace: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Google Places data to be created */
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GooglePlacesInput"];
+            };
+        };
+        responses: {
+            /** @description Google Places data successfully created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["GooglePlaces"];
+                        /** @example Google Places data created successfully */
+                        message?: string;
+                    };
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            404: components["responses"]["NotFound"];
+            500: components["responses"]["InternalServerError"];
+        };
+    };
+    deleteGooglePlace: {
+        parameters: {
+            query: {
+                /** @description The Detroit Chow location ID */
+                locationid: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Google Places data successfully deleted */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
             404: components["responses"]["NotFound"];
             500: components["responses"]["InternalServerError"];
         };

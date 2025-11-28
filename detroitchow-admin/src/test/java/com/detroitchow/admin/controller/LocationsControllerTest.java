@@ -2,7 +2,6 @@ package com.detroitchow.admin.controller;
 
 import com.detroitchow.admin.dto.LocationDto;
 import com.detroitchow.admin.entity.Location;
-import com.detroitchow.admin.entity.Location.LocationStatus;
 import com.detroitchow.admin.mapper.LocationMapper;
 import com.detroitchow.admin.service.LocationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,7 +53,7 @@ class LocationsControllerTest {
                 .locationid("loc-001")
                 .name("Test Restaurant")
                 .description("A test restaurant")
-                .status(LocationStatus.active)
+                .operatingStatus("active")
                 .address1("123 Test St")
                 .city("Detroit")
                 .region("Michigan")
@@ -71,14 +70,14 @@ class LocationsControllerTest {
                 .locationid("loc-001")
                 .name("Test Restaurant")
                 .description("A test restaurant")
-                .status("active")
+                .operatingStatus("active")
                 .address1("123 Test St")
                 .city("Detroit")
                 .region("Michigan")
                 .country("US")
                 .phone1("313-555-0100")
-                .lat(42.3314)
-                .lng(-83.0458)
+                .lat("42.3314")
+                .lng("-83.0458")
                 .website("https://testrestaurant.com")
                 .createDate(now)
                 .updatedDate(now)
@@ -93,14 +92,14 @@ class LocationsControllerTest {
                 .locationid("loc-002")
                 .name("Another Restaurant")
                 .city("Ann Arbor")
-                .status(LocationStatus.active)
+                .operatingStatus("active")
                 .build();
 
         LocationDto locationDto2 = LocationDto.builder()
                 .locationid("loc-002")
                 .name("Another Restaurant")
                 .city("Ann Arbor")
-                .status("active")
+                .operatingStatus("active")
                 .build();
 
         List<Location> locations = Arrays.asList(testLocation, location2);
@@ -158,7 +157,7 @@ class LocationsControllerTest {
                 .andExpect(jsonPath("$.data.name").value("Test Restaurant"))
                 .andExpect(jsonPath("$.data.description").value("A test restaurant"))
                 .andExpect(jsonPath("$.data.city").value("Detroit"))
-                .andExpect(jsonPath("$.data.status").value("active"))
+                .andExpect(jsonPath("$.data.operatingStatus").value("active"))
                 .andExpect(jsonPath("$.data.phone1").value("313-555-0100"))
                 .andExpect(jsonPath("$.data.lat").value(42.3314))
                 .andExpect(jsonPath("$.data.lng").value(-83.0458));
@@ -190,7 +189,7 @@ class LocationsControllerTest {
         LocationDto newLocationDto = LocationDto.builder()
                 .name("New Restaurant")
                 .description("A brand new restaurant")
-                .status("active")
+                .operatingStatus("active")
                 .address1("456 New St")
                 .city("Detroit")
                 .build();
@@ -198,7 +197,7 @@ class LocationsControllerTest {
         Location newLocation = Location.builder()
                 .name("New Restaurant")
                 .description("A brand new restaurant")
-                .status(LocationStatus.active)
+                .operatingStatus("active")
                 .address1("456 New St")
                 .city("Detroit")
                 .build();
@@ -207,7 +206,7 @@ class LocationsControllerTest {
                 .locationid("loc_abc123")
                 .name("New Restaurant")
                 .description("A brand new restaurant")
-                .status(LocationStatus.active)
+                .operatingStatus("active")
                 .address1("456 New St")
                 .city("Detroit")
                 .createDate(OffsetDateTime.now())
@@ -218,7 +217,7 @@ class LocationsControllerTest {
                 .locationid("loc_abc123")
                 .name("New Restaurant")
                 .description("A brand new restaurant")
-                .status("active")
+                .operatingStatus("active")
                 .address1("456 New St")
                 .city("Detroit")
                 .build();
@@ -293,7 +292,7 @@ class LocationsControllerTest {
                 .locationid("loc-001")
                 .name("Updated Restaurant")
                 .description("Updated description")
-                .status("active")
+                .operatingStatus("active")
                 .city("Ann Arbor")
                 .build();
 
@@ -301,7 +300,7 @@ class LocationsControllerTest {
                 .locationid("loc-001")
                 .name("Updated Restaurant")
                 .description("Updated description")
-                .status(LocationStatus.active)
+                .operatingStatus("active")
                 .city("Ann Arbor")
                 .build();
 
@@ -309,7 +308,7 @@ class LocationsControllerTest {
                 .locationid("loc-001")
                 .name("Updated Restaurant")
                 .description("Updated description")
-                .status(LocationStatus.active)
+                .operatingStatus("active")
                 .city("Ann Arbor")
                 .updatedDate(OffsetDateTime.now())
                 .build();
@@ -318,7 +317,7 @@ class LocationsControllerTest {
                 .locationid("loc-001")
                 .name("Updated Restaurant")
                 .description("Updated description")
-                .status("active")
+                .operatingStatus("active")
                 .city("Ann Arbor")
                 .build();
 
@@ -411,7 +410,7 @@ class LocationsControllerTest {
         LocationDto fullLocationDto = LocationDto.builder()
                 .name("Full Restaurant")
                 .description("Complete description")
-                .status("active")
+                .operatingStatus("active")
                 .address1("123 Main St")
                 .address2("Suite 100")
                 .city("Detroit")
@@ -421,8 +420,8 @@ class LocationsControllerTest {
                 .country("US")
                 .phone1("313-555-0100")
                 .phone2("313-555-0101")
-                .lat(42.3314)
-                .lng(-83.0458)
+                .lat("42.3314")
+                .lng("-83.0458")
                 .website("https://fullrestaurant.com")
                 .facebook("https://facebook.com/fullrestaurant")
                 .twitter("https://twitter.com/fullrestaurant")
@@ -436,14 +435,14 @@ class LocationsControllerTest {
 
         Location fullLocation = Location.builder()
                 .name("Full Restaurant")
-                .status(LocationStatus.active)
+                .operatingStatus("active")
                 .build();
 
         Location savedLocation = Location.builder()
                 .locationid("loc_full123")
                 .name("Full Restaurant")
                 .description("Complete description")
-                .status(LocationStatus.active)
+                .operatingStatus("active")
                 .address1("123 Main St")
                 .city("Detroit")
                 .createDate(OffsetDateTime.now())
@@ -454,7 +453,7 @@ class LocationsControllerTest {
                 .locationid("loc_full123")
                 .name("Full Restaurant")
                 .description("Complete description")
-                .status("active")
+                .operatingStatus("active")
                 .address1("123 Main St")
                 .city("Detroit")
                 .build();
@@ -485,14 +484,14 @@ class LocationsControllerTest {
                 .locationid(osmId)
                 .name("OSM Restaurant")
                 .city("Detroit")
-                .status(LocationStatus.active)
+                .operatingStatus("active")
                 .build();
 
         LocationDto osmDto = LocationDto.builder()
                 .locationid(osmId)
                 .name("OSM Restaurant")
                 .city("Detroit")
-                .status("active")
+                .operatingStatus("active")
                 .build();
 
         when(locationService.getLocationById(osmId)).thenReturn(Optional.of(osmLocation));
@@ -516,21 +515,21 @@ class LocationsControllerTest {
         LocationDto updateDto = LocationDto.builder()
                 .locationid("loc-001")
                 .name("Test Restaurant")
-                .status("temporarily_closed")
+                .operatingStatus("temporarily_closed")
                 .city("Detroit")
                 .build();
 
         Location updateLocation = Location.builder()
                 .locationid("loc-001")
                 .name("Test Restaurant")
-                .status(LocationStatus.temporarily_closed)
+                .operatingStatus("temporarily_closed")
                 .city("Detroit")
                 .build();
 
         Location updatedLocation = Location.builder()
                 .locationid("loc-001")
                 .name("Test Restaurant")
-                .status(LocationStatus.temporarily_closed)
+                .operatingStatus("temporarily_closed")
                 .city("Detroit")
                 .updatedDate(OffsetDateTime.now())
                 .build();
@@ -538,7 +537,7 @@ class LocationsControllerTest {
         LocationDto updatedDto = LocationDto.builder()
                 .locationid("loc-001")
                 .name("Test Restaurant")
-                .status("temporarily_closed")
+                .operatingStatus("temporarily_closed")
                 .city("Detroit")
                 .build();
 
@@ -552,7 +551,7 @@ class LocationsControllerTest {
                         .content(objectMapper.writeValueAsString(updateDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.status").value("temporarily_closed"))
+                .andExpect(jsonPath("$.data.operatingStatus").value("temporarily_closed"))
                 .andExpect(jsonPath("$.message").value("Location updated successfully"));
 
         verify(locationService, times(1)).updateLocation(any(Location.class));

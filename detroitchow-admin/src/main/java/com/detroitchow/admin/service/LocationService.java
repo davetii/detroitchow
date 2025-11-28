@@ -2,7 +2,6 @@ package com.detroitchow.admin.service;
 
 import com.detroitchow.admin.entity.Location;
 import com.detroitchow.admin.repository.LocationRepository;
-import com.detroitchow.admin.repository.MenuRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -62,7 +61,7 @@ public class LocationService {
         // Update fields
         existingLocation.setName(location.getName());
         existingLocation.setDescription(location.getDescription());
-        existingLocation.setStatus(location.getStatus());
+        existingLocation.setOperatingStatus(location.getOperatingStatus());
         existingLocation.setAddress1(location.getAddress1());
         existingLocation.setAddress2(location.getAddress2());
         existingLocation.setCity(location.getCity());

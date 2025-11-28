@@ -77,8 +77,10 @@ databaseChangeLog:
                   name: description
                   type: varchar(2000)
               - column:
-                  name: status
-                  type: detroitchow.location_status
+                  name: operating_status
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
                   defaultValue: 'active'
               - column:
                   name: address1

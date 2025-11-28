@@ -76,6 +76,7 @@ public class LocationsController {
     @PutMapping("/location")
     public ResponseEntity<?> updateLocation(@RequestBody LocationDto locationDto) {
         log.debug("Updating location: {}", locationDto.getLocationid());
+        log.debug("showing location: {}", locationDto);
         
         try {
             Location location = locationMapper.toEntity(locationDto);

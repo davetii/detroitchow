@@ -202,3 +202,9 @@ data/imports/locations_import.sql
 !README.md
 !database/schema/*.sql
 !database/seed-data/*.py
+
+# ============================================================================
+# react, web based
+# ============================================================================
+coverage/
+detroitchow-admin-ui/coverage/*
