@@ -530,7 +530,7 @@ components:
   schemas:
     Location:
       type: object
-      description: Detroit Chow location with all fields including menus
+      description: Detroit Chow location with all fields
       required:
         - locationid
         - name
@@ -596,11 +596,11 @@ components:
         lat:
           type: string
           description: Latitude coordinate
-          example: 42.3314
+          example: "42.3314"
         lng:
           type: string
           description: Longitude coordinate
-          example: -83.0458
+          example: "-83.0458"
         website:
           type: string
           description: Restaurant website URL

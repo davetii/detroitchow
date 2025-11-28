@@ -228,15 +228,15 @@ export function LocationsTable({ data }: LocationsTableProps) {
       },
       meta: { width: '300px' },
     }),
-    columnHelper.accessor('status', {
+    columnHelper.accessor('operatingStatus', {
       header: 'Status',
       cell: (info) => {
         const location = info.row.original;
         const isEditing = editingRowId === location.locationid;
         return (
           <StatusCell
-            value={getCurrentValue(location, 'status')}
-            onChange={(value) => handleFieldChange('status', value)}
+            value={getCurrentValue(location, 'operatingStatus')}
+            onChange={(value) => handleFieldChange('operatingStatus', value)}
             isEditing={isEditing}
           />
         );
