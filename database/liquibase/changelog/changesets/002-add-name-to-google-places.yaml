@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-add-name-column-to-google-places
+      author: detroitchow
+      changes:
+        - addColumn:
+            tableName: google_places
+            schemaName: detroitchow
+            columns:
+              - column:
+                  name: name
+                  type: varchar(500)
+                  constraints:
+                    nullable: true
+      rollback:
+        - dropColumn:
+            tableName: google_places
+            schemaName: detroitchow
+            columnName: name

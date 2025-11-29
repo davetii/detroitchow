@@ -48,10 +48,10 @@ VALUES
     ('https://www.eatdimestore.com/lunch', 'loc-007', NULL, 2, 'Lunch Menu', CURRENT_TIMESTAMP, 'system', CURRENT_TIMESTAMP, 'system');
 
 -- Insert test Google Places data
-INSERT INTO detroitchow.google_places (locationid, place_id, lat, lng, phone1, formatted_address, website, google_url, business_status, created_at)
+INSERT INTO detroitchow.google_places (locationid, place_id, name, lat, lng, phone1, formatted_address, website, google_url, business_status, created_at)
 VALUES
-    ('loc-001', 'ChIJN5X_gFcJO4gRZn0F5hC0k9c', '42.3297', '-83.0458', '+13139648198', '118 W Lafayette Blvd, Detroit, MI 48226', 'https://www.coneydetroit.com', 'https://maps.google.com/?cid=123456789', 'OPERATIONAL', CURRENT_TIMESTAMP),
+    ('loc-001', 'ChIJN5X_gFcJO4gRZn0F5hC0k9c', 'Lafayette', '42.3297', '-83.0458', '+13139648198', '118 W Lafayette Blvd, Detroit, MI 48226', 'https://www.coneydetroit.com', 'https://maps.google.com/?cid=123456789', 'OPERATIONAL', CURRENT_TIMESTAMP),
 
-    ('loc-002', 'ChIJxYx-YnYJO4gR5_8h5zQN2qM', '42.4043', '-83.0307', '+13138929001', '17125 Conant St, Detroit, MI 48212', 'https://www.buddyspizza.com', 'https://maps.google.com/?cid=987654321', 'OPERATIONAL', CURRENT_TIMESTAMP),
+    ('loc-002', 'ChIJxYx-YnYJO4gR5_8h5zQN2qM', 'Buddies', '42.4043', '-83.0307', '+13138929001', '17125 Conant St, Detroit, MI 48212', 'https://www.buddyspizza.com', 'https://maps.google.com/?cid=987654321', 'OPERATIONAL', CURRENT_TIMESTAMP),
 
-    ('loc-003', 'ChIJ_e3KLMwKO4gR8pPw5YhN1dU', '42.3516', '-83.0632', '+13134385055', '3921 2nd Ave, Detroit, MI 48201', 'https://www.seldenstandard.com', 'https://maps.google.com/?cid=456789123', 'OPERATIONAL', CURRENT_TIMESTAMP);
+    ('loc-003', 'ChIJ_e3KLMwKO4gR8pPw5YhN1dU', 'Selden Standard', '42.3516', '-83.0632', '+13134385055', '3921 2nd Ave, Detroit, MI 48201', 'https://www.seldenstandard.com', 'https://maps.google.com/?cid=456789123', 'OPERATIONAL', CURRENT_TIMESTAMP);

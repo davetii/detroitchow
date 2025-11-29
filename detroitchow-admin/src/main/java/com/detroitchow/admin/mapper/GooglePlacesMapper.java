@@ -32,6 +32,7 @@ public class GooglePlacesMapper {
                 .storeJson(googlePlaces.getStoreJson())
                 .premisePlaceId(googlePlaces.getPremisePlaceId())
                 .storePlaceId(googlePlaces.getStorePlaceId())
+                .name(googlePlaces.getName())
                 .build();
     }
 
@@ -60,6 +61,7 @@ public class GooglePlacesMapper {
                 .storeJson(dto.getStoreJson())
                 .premisePlaceId(dto.getPremisePlaceId())
                 .storePlaceId(dto.getStorePlaceId())
+                .name(dto.getName())
                 .build();
     }
 }
