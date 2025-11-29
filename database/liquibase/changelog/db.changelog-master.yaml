@@ -2,3 +2,6 @@ databaseChangeLog:
   - include:
       file: changesets/001-init-schema.yaml
       relativeToChangelogFile: true
+  - include:
+      file: changesets/002-add-name-to-google-places.yaml
+      relativeToChangelogFile: true

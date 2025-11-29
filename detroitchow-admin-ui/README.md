@@ -2,18 +2,26 @@
 
 Admin interface for managing DetroitChow restaurant locations and menus.
 
+## 📚 Important Documentation
+
+**Before starting development, read these guides:**
+
+- **[FRONTEND_PATTERNS.md](./FRONTEND_PATTERNS.md)** - TypeScript, React, and API integration patterns
+- **[TESTING.md](./TESTING.md)** - Comprehensive testing guide with examples
+- **[../CLAUDE.md](../CLAUDE.md)** - Project-wide standards and conventions
+
 ## Tech Stack
 
-- **React 18+** with TypeScript
-- **Vite** - Build tool
-- **React Router v6** - Routing
-- **TanStack Query** - Server state management
+- **React 19** with TypeScript
+- **Vite 7** - Build tool
+- **React Router v7** - Routing
+- **TanStack Query (React Query)** - Server state management
 - **TanStack Table** - Data tables
 - **React Hook Form** - Form handling
-- **Zod** - Schema validation
-- **Tailwind CSS** - Styling
-- **Vitest** - Testing
+- **Tailwind CSS v4** - Styling
+- **Vitest** - Testing framework
 - **React Testing Library** - Component testing
+- **Happy-DOM** - Fast DOM implementation for tests
 
 ## Prerequisites
 
@@ -135,6 +143,10 @@ function useLocations() {
 
 ## Testing
 
+**See [TESTING.md](./TESTING.md) for comprehensive testing guide.**
+
+### Quick Commands
+
 Run tests:
 
 ```bash
@@ -147,11 +159,27 @@ Run tests with UI:
 npm run test:ui
 ```
 
-Run tests for coverage:
+Run tests with coverage:
 
 ```bash
-npm run test -- --coverage
+npm run test -- --coverage --run
 ```
+
+### Coverage Requirements
+
+- **Minimum 80% coverage** required for all metrics
+- Thresholds enforced: lines, functions, branches, statements
+- Tests will fail if coverage drops below 80%
+
+### Testing Key Points
+
+- Use `.test.tsx` for files with JSX, `.test.ts` for plain TypeScript
+- Always import `React` when using JSX in tests
+- Mock backend responses in camelCase (actual format)
+- Use `waitFor` for async operations
+- Clear mocks in `beforeEach`
+
+See [TESTING.md](./TESTING.md) for detailed patterns and examples.
 
 
 ## Building for Production
@@ -170,12 +198,36 @@ npm run preview
 
 ## Development Workflow
 
-1. Ensure the backend API is running
-2. Generate types from OpenAPI spec: `npm run generate-types`
-3. Start development server: `npm run dev`
-4. Make changes and test
+### First Time Setup
+
+1. Install dependencies: `npm install`
+2. Copy environment file: `cp .env.example .env`
+3. Generate types: `npm run generate-types`
+4. Start dev server: `npm run dev`
+
+### Daily Development
+
+1. Ensure the backend API is running (`http://localhost:8080`)
+2. Read [FRONTEND_PATTERNS.md](./FRONTEND_PATTERNS.md) for coding standards
+3. Make changes following TypeScript patterns
+4. Write tests following [TESTING.md](./TESTING.md)
 5. Run tests: `npm test`
-6. Build for production: `npm run build`
+6. Check coverage: `npm run test -- --coverage --run`
+7. Run lint: `npm run lint`
+8. Build for production: `npm run build`
+
+### Code Standards Checklist
+
+Before committing:
+
+- [ ] All files use `.tsx` or `.ts` extensions (NO `.jsx` or `.js`)
+- [ ] Tests use `.test.tsx` if they contain JSX
+- [ ] Custom hooks start with `use` and return `null` (not `undefined`)
+- [ ] Backend responses mapped to snake_case in hooks
+- [ ] All tests pass with `npm test`
+- [ ] Coverage meets 80% threshold
+- [ ] Lint passes with `npm run lint`
+- [ ] Build succeeds with `npm run build`
 
 ## Features
 

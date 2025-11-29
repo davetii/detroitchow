@@ -43,6 +43,7 @@ class GooglePlacesMapperTest {
                 .storeJson(storeJson)
                 .premisePlaceId("ChIJPremiseExample")
                 .storePlaceId("ChIJStoreExample")
+                .name("testName")
                 .build();
 
         // When
@@ -65,6 +66,7 @@ class GooglePlacesMapperTest {
         assertEquals(storeJson, dto.getStoreJson());
         assertEquals("ChIJPremiseExample", dto.getPremisePlaceId());
         assertEquals("ChIJStoreExample", dto.getStorePlaceId());
+        assertEquals("testName", dto.getName());
     }
 
     @Test
@@ -104,6 +106,7 @@ class GooglePlacesMapperTest {
         assertNull(dto.getStoreJson());
         assertNull(dto.getPremisePlaceId());
         assertNull(dto.getStorePlaceId());
+        assertNull(dto.getName());
     }
 
     @Test
@@ -129,6 +132,7 @@ class GooglePlacesMapperTest {
                 .storeJson(storeJson)
                 .premisePlaceId("ChIJPremise2")
                 .storePlaceId("ChIJStore2")
+                .name("testName")
                 .build();
 
         // When
@@ -151,6 +155,7 @@ class GooglePlacesMapperTest {
         assertEquals(storeJson, googlePlaces.getStoreJson());
         assertEquals("ChIJPremise2", googlePlaces.getPremisePlaceId());
         assertEquals("ChIJStore2", googlePlaces.getStorePlaceId());
+        assertEquals("testName", googlePlaces.getName());
     }
 
     @Test
@@ -191,6 +196,7 @@ class GooglePlacesMapperTest {
         assertNull(googlePlaces.getStoreJson());
         assertNull(googlePlaces.getPremisePlaceId());
         assertNull(googlePlaces.getStorePlaceId());
+        assertNull(googlePlaces.getName());
     }
 
     @Test
@@ -216,6 +222,7 @@ class GooglePlacesMapperTest {
                 .storeJson(storeJson)
                 .premisePlaceId("ChIJPremiseTest")
                 .storePlaceId("ChIJStoreTest")
+                .name("testName")
                 .build();
 
         // When
@@ -239,6 +246,7 @@ class GooglePlacesMapperTest {
         assertEquals(originalGooglePlaces.getStoreJson(), resultGooglePlaces.getStoreJson());
         assertEquals(originalGooglePlaces.getPremisePlaceId(), resultGooglePlaces.getPremisePlaceId());
         assertEquals(originalGooglePlaces.getStorePlaceId(), resultGooglePlaces.getStorePlaceId());
+        assertEquals(originalGooglePlaces.getName(), resultGooglePlaces.getName());
     }
 
     @Test
@@ -264,6 +272,7 @@ class GooglePlacesMapperTest {
                 .storeJson(storeJson)
                 .premisePlaceId("ChIJOriginalPremise")
                 .storePlaceId("ChIJOriginalStore")
+                .name("testName")
                 .build();
 
         // When
@@ -287,6 +296,7 @@ class GooglePlacesMapperTest {
         assertEquals(originalDto.getStoreJson(), resultDto.getStoreJson());
         assertEquals(originalDto.getPremisePlaceId(), resultDto.getPremisePlaceId());
         assertEquals(originalDto.getStorePlaceId(), resultDto.getStorePlaceId());
+        assertEquals(originalDto.getName(), resultDto.getName());
     }
 
     @Test

@@ -2,18 +2,33 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## ⚠️ CRITICAL: Read Before Any Work
+
+**At the start of EVERY session, you MUST read these files:**
+
+1. **This file (CLAUDE.md)** - Overall project guidance
+2. **For Frontend/React work:**
+   - Read: `detroitchow-admin-ui/FRONTEND_PATTERNS.md`
+   - Read: `detroitchow-admin-ui/TESTING.md`
+   - Read: `detroitchow-admin-ui/README.md`
+3. **For Database work:**
+   - Read: `database/liquibase/README.md`
+
+**DO NOT start writing code until you've reviewed the relevant documentation.**
+
 ## AI Assistant Session Startup Protocol
 
 **REQUIRED - READ FIRST:** At the beginning of each new session, you MUST:
 
-1. Check the Notion workspace for recent updates, decisions, and project context
-2. Query the DetroitChow Notion database: https://www.notion.so/davetii/DetroitChow-2a6df0b1520d80408941c3f5b6c7185f
-3. Review recent work history and current priorities
-4. Look for any decisions or changes that affect the current task
+1. **Read project-specific documentation** (see above) for the area you're working in
+2. Check the Notion workspace for recent updates, decisions, and project context
+3. Query the DetroitChow Notion database: https://www.notion.so/davetii/DetroitChow-2a6df0b1520d80408941c3f5b6c7185f
+4. Review recent work history and current priorities
+5. Look for any decisions or changes that affect the current task
 
-**Why this matters:** The Notion workspace contains project history and context that supplements this codebase. Checking it ensures continuity across sessions and prevents duplicate or conflicting work.
+**Why this matters:** The documentation contains critical patterns that prevent common mistakes. The Notion workspace contains project history and context that supplements this codebase. Checking both ensures continuity across sessions and prevents duplicate or conflicting work.
 
-**How to access:** Use available Notion MCP tools (if connected) to query the workspace before starting any work.
+**How to access:** Use the Read tool to read documentation files. Use available Notion MCP tools (if connected) to query the workspace before starting any work.
 
 ## Project Overview
 
@@ -236,6 +251,50 @@ See the [Database Management](#working-with-the-database) section for migration 
 ## React Admin UI Development
 
 Located in `detroitchow-admin-ui/`
+
+### Frontend Development Standards
+
+**CRITICAL - READ BEFORE ANY FRONTEND WORK:**
+
+1. **TypeScript Only - NO JavaScript**
+   - NEVER create `.js` or `.jsx` files
+   - ALWAYS use `.tsx` for React components and tests with JSX
+   - ALWAYS use `.ts` for utilities and plain TypeScript
+
+2. **Test File Extensions**
+   - `.test.tsx` - When tests contain JSX (components, hooks with wrappers)
+   - `.test.ts` - When tests contain NO JSX
+   - ALWAYS import `React` when using JSX in test files
+
+3. **API Response Handling**
+   - Backend returns camelCase (`placeId`, `formattedAddress`)
+   - OpenAPI spec defines snake_case (`place_id`, `formatted_address`)
+   - ALWAYS map backend responses to match spec in custom hooks
+   - See `src/hooks/useGooglePlace.ts` for example pattern
+
+4. **Custom Hooks**
+   - MUST start with `use`
+   - MUST return `null` instead of `undefined` for missing data
+   - MUST use `enabled` option for conditional queries
+   - MUST be placed in `src/hooks/`
+   - MUST have corresponding test file
+
+5. **Testing Requirements**
+   - Minimum 80% coverage (lines, functions, branches, statements)
+   - Use simple, focused tests
+   - Mock hooks, not components
+   - ALWAYS use `waitFor` for async operations
+   - ALWAYS use `vi.clearAllMocks()` in `beforeEach`
+
+6. **React Hook Form Patterns**
+   - Don't use `getByLabelText` in tests (not compatible)
+   - Use `getByDisplayValue` or `getByRole` instead
+   - Forms must have Save/Undo buttons
+   - Buttons disabled when form is pristine
+
+**Detailed Documentation:**
+- [Frontend Patterns Guide](detroitchow-admin-ui/FRONTEND_PATTERNS.md)
+- [Testing Guide](detroitchow-admin-ui/TESTING.md)
 
 ### Building and Running
 

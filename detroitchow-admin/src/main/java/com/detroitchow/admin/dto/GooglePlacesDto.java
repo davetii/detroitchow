@@ -18,6 +18,7 @@ public class GooglePlacesDto {
 
     private Integer id;
     private String locationid;
+    private String name;
     private String placeId;
     private String lat;
     private String lng;

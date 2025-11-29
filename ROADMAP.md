@@ -14,9 +14,9 @@
 
 ## Admin Tool
 - [x] Search For Locations
-- [ ] Create locations
-- [ ] Update Locations
-- [ ] Delete Loations
+- [x] Create locations
+- [x] Update Locations
+- [x] Delete Loations
 
 ## Mobile Experience
 - [ ] Flutter app foundation

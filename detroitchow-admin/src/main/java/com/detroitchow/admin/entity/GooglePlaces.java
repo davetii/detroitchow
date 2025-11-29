@@ -37,6 +37,9 @@ public class GooglePlaces implements Serializable {
     @Column(name = "lng", length = 50)
     private String lng;
 
+    @Column(name = "name", length = 500)
+    private String name;
+
     @Column(name = "phone1", length = 500)
     private String phone1;
 
