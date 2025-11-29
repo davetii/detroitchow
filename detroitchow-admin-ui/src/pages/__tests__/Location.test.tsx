@@ -479,4 +479,49 @@ describe('Location Page', () => {
 
     expect(screen.queryByText('Google Places Name (Reference)')).not.toBeInTheDocument();
   });
+
+  it('should handle Google Places data with all fields', () => {
+    vi.mocked(useLocationModule.useLocation).mockReturnValue({
+      data: mockLocation,
+      isLoading: false,
+      error: null,
+    } as any);
+
+    vi.mocked(useGooglePlaceModule.useGooglePlace).mockReturnValue({
+      data: {
+        ...mockGooglePlace,
+        phone1: '313-555-9999',
+        website: 'https://google-example.com',
+      },
+      isLoading: false,
+      error: null,
+    } as any);
+
+    renderWithProviders();
+
+    // Verify Google Places phone and website are displayed
+    expect(screen.getByDisplayValue('313-555-9999')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('https://google-example.com')).toBeInTheDocument();
+  });
+
+  it('should handle error in error message rendering', () => {
+    const error = { message: 'Custom error object' };
+
+    vi.mocked(useLocationModule.useLocation).mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      error: error as any,
+    } as any);
+
+    vi.mocked(useGooglePlaceModule.useGooglePlace).mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      error: null,
+    } as any);
+
+    renderWithProviders();
+
+    expect(screen.getByText(/Error loading location/)).toBeInTheDocument();
+    expect(screen.getByText(/Unknown error/)).toBeInTheDocument();
+  });
 });
