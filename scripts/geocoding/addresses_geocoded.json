@@ -1,0 +1,10 @@
+[
+  {
+    "input_address": "35351 23 Mile Rd, New Baltimore, MI, United States, Michigan",
+    "formatted_address": "35351 23 Mile Rd, New Baltimore, MI 48047, USA",
+    "lat": "42.6765001",
+    "lng": "-82.74956639999999",
+    "location_type": "ROOFTOP",
+    "status": "success"
+  }
+]
